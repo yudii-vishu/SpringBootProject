@@ -49,18 +49,7 @@ public class UserController {
 		return userService.getUser(id);
 	}
 	
-	/**
-	 * @param userDTO
-	 * 
-	 * @return This controller will save and update user.
-	 * 
-	 * @throws Exception
-	 */
-	@PostMapping("/user")
-	public UserDTO saveAndUpdate(@RequestBody UserDTO userDTO) throws Exception {
-		
-		return userService.saveAndUpdate(userDTO);
-	}
+	
 	
 	/**
 	 * @param id
