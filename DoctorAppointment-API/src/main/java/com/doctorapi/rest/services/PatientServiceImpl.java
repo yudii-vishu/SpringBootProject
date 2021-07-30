@@ -177,15 +177,18 @@ public class PatientServiceImpl {
 		if(patientDTO.getId()!=null) {
 			
 			patient = validateAndUpdate(patientDTO);
+			
+			patDTO = new PatientDTO(patientDao.save(patient));
+			if(patDTO!=null) {
+				message = "Updated Successfully";
+			}
+			
 		}else {
 			if(patientDao.findByEmail(patientDTO.getEmail())!=null) {
 				logger.info("Email already exist. Please enter valid email.");
 				 throw new Exception ("Email already exist. Please enter valid email.");
 				}
-			if(patientDao.findByUserId(patientDTO.getUserId())!=null) {
-				logger.info("userId already exist.Pleasem enter valid userId.");
-				throw new Exception ("userId already exist.Pleasem enter valid userId.");
-			}
+			
 			
 			//Adding new patient detail
 			User u = new User();
@@ -325,6 +328,14 @@ public class PatientServiceImpl {
 		if(patient.getEmail().equals(patientDTO.getEmail())) {
 			logger.info("Email already exist.");
 			throw new Exception ("Email already exist.");
+		}
+		if(patientDao.findByUserId(patientDTO.getUserId())==null) {
+			logger.info("Pleasem enter valid userId.");
+			throw new Exception ("Please enter valid userId.");
+		}
+		if(patientDTO.getRoleId()==null || patientDTO.getRoleId()==0 || patientDTO.getRoleId()==2) {
+			logger.info("Please enter roleId 1 for patient.");
+			throw new Exception ("Please enter roleId 1 for patient.");
 		}
 		if(patientDTO.getEmail()!=null) {
 			patient.setEmail(patientDTO.getEmail());
