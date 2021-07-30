@@ -146,9 +146,9 @@ public class DoctorServiceImpl {
 		
 		Doctor doctor = validateAndGetDoctor(doctorId);
 		
-		if(doctor.getId()== null) {
-			throw new Exception ("Doctor Id is not present.");
-		}
+//		if(doctor.getId()== null) {
+//			throw new Exception ("Doctor Id is not present.");
+//		}
 		return new DoctorDTO(doctor);
 	}
 
@@ -289,9 +289,8 @@ public class DoctorServiceImpl {
 		if(doctorDTO.getName()!=null) {
 			doctor.setName(doctorDTO.getName());
 		}
-		if(doctor.getEmail().equals(doctorDTO.getEmail())) {
-			logger.info("Email already exist.");
-			throw new Exception("Email already exist.");
+		if(doctorDTO.getEmail() !=null) {
+			doctor.setEmail(doctorDTO.getEmail());
 		}
 		if(doctorDao.findByUserId(doctorDTO.getUserId())==null) {
 			 logger.info("Please enter your valid userId.");

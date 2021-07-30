@@ -75,7 +75,7 @@ public class PatientServiceImpl {
 			logger.error("Please enter your gender.");
 			throw new Exception ("Please enter your gender.");
 		}
-		if(patient.getAge()==0) {
+		if(patient.getAge()<0 || patient.getAge()==0) {
 			logger.info("Age must be greater than 0.It should not be null.");
 			throw new Exception ("Age must be greater than 0.It should not be null.");
 		}
@@ -96,7 +96,7 @@ public class PatientServiceImpl {
 			logger.error("Address not be empty and null.");
 			throw new Exception("Address not be empty and null.");
 		}
-		if(patientDTO.getAge()==0) {
+		if(patientDTO.getAge()<0 || patientDTO.getAge()==0) {
 			logger.info("Age must be greater than 0.");
 			throw new Exception ("Age must be greater than 0.");
 		}
@@ -149,9 +149,9 @@ public class PatientServiceImpl {
 	public PatientDTO getPatientById(Long patientId) throws Exception{
 		
 		Patient patient = validateAndGetPatient(patientId);
-		if(patient.getId()==null) {
-			throw new Exception("Patient Id is not present.");
-		}
+//		if(patient.getId()==null) {
+//			throw new Exception("Patient Id is not present.");
+//		}
 		return new PatientDTO(patient);
 	}
 	
@@ -231,34 +231,6 @@ public class PatientServiceImpl {
 	/**
 	 * @param patientDTO
 	 * 
-	 * This method will update the patient detail regarding patientId
-	 * 
-	 * @throws Exception
-	 */
-	public PatientDTO update(PatientDTO patientDTO) throws Exception {
-		
-		logger.info("To update patient");
-		Optional<Patient> patientOpt = patientDao.findById(patientDTO.getId());
-		
-		if(patientOpt.isPresent()) {
-			Patient patient = new Patient(patientDTO);
-			patient.setId(patientDTO.getId());
-		
-			if(patient.getId()== null) {
-				logger.error("PatientId not be null.");
-		
-		}else {
-			validatePatient(patient);
-			patientDTO = new PatientDTO(patientDao.save(patient));
-		}
-			}
-		return patientDTO;
-	}
-	
-	
-	/**
-	 * @param patientDTO
-	 * 
 	 * This method will validate updatePatientDTO object
 	 * 
 	 * @throws Exception
@@ -325,10 +297,10 @@ public class PatientServiceImpl {
 		if(patientDTO.getLastName() !=null) {
 			patient.setLastName(patientDTO.getLastName());
 		}
-		if(patient.getEmail().equals(patientDTO.getEmail())) {
-			logger.info("Email already exist.");
-			throw new Exception ("Email already exist.");
+		if(patientDTO.getEmail() != null) {
+			patient.setEmail(patientDTO.getEmail());
 		}
+//		
 		if(patientDao.findByUserId(patientDTO.getUserId())==null) {
 			logger.info("Pleasem enter valid userId.");
 			throw new Exception ("Please enter valid userId.");

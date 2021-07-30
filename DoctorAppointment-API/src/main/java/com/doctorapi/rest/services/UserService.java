@@ -91,11 +91,7 @@ public class UserService {
 	public UserDTO getUser(Long id) throws Exception {
 		
 		User user = validateAndGetUser(id);
-		
-		if(!user.isActive()) {
-			logger.info("User is deactivated.");
-			throw new Exception ("User is deactivated.");
-		}
+
 		return new UserDTO(user);
 	}
 	
@@ -119,69 +115,8 @@ public class UserService {
 		logger.info("Returning User after validating user existence.");
 		return user.get();
 	}
-
-
-	/**
-	 * @param userDTO
-	 * 
-	 * This method will save new user and update user detail.
-	 * 
-	 * @return UserrDTO
-	 * 
-	 * @throws Exception
-	 */
-	public UserDTO saveAndUpdate(UserDTO userDTO) throws Exception {
-
-		logger.info("To save new user and update detail.");
-		validateUserDTO(userDTO);
-		User user;
-		
-		if(userDTO.getId() != null) {
-			
-			user = validateAndUpdate(userDTO);
-		}else {
-			
-			if(userDao.findByEmail(userDTO.getEmail())!=null) {
-				logger.info("Please enter valid email.Email is already exist.");
-				throw new Exception ("Please enter valid email.Email is already exist.");
-			}
-			user=new User(userDTO);
-		}
-			return new UserDTO(userDao.save(user));
-	}
-		
 		
 
-
-	/**
-	 * @param userDTO
-	 * 
-	 * This method will validate userDTO object to update.
-	 * 
-	 * @return user
-	 * 
-	 * @throws Exception
-	 */
-	private User validateAndUpdate(UserDTO userDTO) throws Exception {
-
-		logger.info("To validate userDTO object to update.");
-		User user = validateAndGetUser(userDTO.getId());
-		
-		if(!user.isActive()) {
-			throw new Exception ("User is deactivated.Please activate the user.");
-		}
-		if(!validateAndGetUser(userDTO.getId()).getEmail().equals(userDTO.getEmail())) {
-			
-			logger.info("Email already exist.");
-			throw new Exception ("Email already exist.");
-		}
-		if(userDTO.getPassword() != null) {
-			user.setPassword(userDTO.getPassword());
-		}
-		user.setActive(true);
-		logger.info("Returning user after validating UserDTO object to update.");
-		return user;
-	}
 
 
 	public void changeStatus(Long id) throws Exception {
