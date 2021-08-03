@@ -308,10 +308,10 @@ public class PatientServiceImpl {
 			logger.info("Pleasem enter valid userId.");
 			throw new Exception ("Please enter valid userId.");
 		}
-		if(patientDTO.getRoleId()==null || patientDTO.getRoleId()==0 || patientDTO.getRoleId()==2) {
-			logger.info("Please enter roleId 1 for patient.");
-			throw new Exception ("Please enter roleId 1 for patient.");
-		}
+//		if(patientDTO.getRoleId()==null || patientDTO.getRoleId()==0 || patientDTO.getRoleId()==2) {
+//			logger.info("Please enter roleId 1 for patient.");
+//			throw new Exception ("Please enter roleId 1 for patient.");
+//		}
 		if(patientDTO.getEmail()!=null) {
 			patient.setEmail(patientDTO.getEmail());
 		}

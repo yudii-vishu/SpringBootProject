@@ -300,10 +300,10 @@ public class DoctorServiceImpl {
 			 logger.info("Please enter your valid userId.");
 			 throw new Exception ("Please enter your valid userId.");
 		 }
-		if(doctorDTO.getRoleId()==null || doctorDTO.getRoleId()==0 || doctorDTO.getRoleId()==1) {
-			logger.info("Please enter roleId 2 for doctor.");
-			throw new Exception ("Please enter roleId 2 for doctor.");
-		}
+//		if(doctorDTO.getRoleId()==null || doctorDTO.getRoleId()==0 || doctorDTO.getRoleId()==1) {
+//			logger.info("Please enter roleId 2 for doctor.");
+//			throw new Exception ("Please enter roleId 2 for doctor.");
+//		}
 		if(doctorDTO.getEmail()!=null) {
 			doctor.setEmail(doctorDTO.getEmail());
 		}
