@@ -1,7 +1,11 @@
 package com.doctorapi.rest.dto;
 
+import java.util.Date;
+import java.util.Objects;
+
 import com.doctorapi.rest.models.Patient;
 import com.doctorapi.rest.models.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PatientDTO {
 	
@@ -15,7 +19,10 @@ public class PatientDTO {
 	private String password;
 	private Long userId;
 	private boolean isActive;
+	@JsonIgnore
 	private Long roleId;
+	private Date createdOn;
+	private Date modifiedOn;
 	
 	
 	public Long getRoleId() {
@@ -132,6 +139,21 @@ public class PatientDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+	public Date getModifiedOn() {
+		return modifiedOn;
+	}
+	public void setModifiedOn(Date modifiedOn) {
+		this.modifiedOn = modifiedOn;
+	}
+	
+	
 	public PatientDTO(Patient patient) {
 		super();
 		this.id = patient.getId();
@@ -145,31 +167,19 @@ public class PatientDTO {
 		this.userId = patient.getUser().getId();
 		this.isActive = patient.getUser().isActive();
 		this.roleId = patient.getUser().getRole().getId();
+		
+		this.createdOn = patient.getCreatedOn();
+		this.modifiedOn = patient.getModifiedOn();
 	}
 	
 	public PatientDTO() {
 
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + age;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		return result;
+		return Objects.hash(address, age, createdOn, email, firstName, gender, id, isActive, lastName, modifiedOn,
+				password, roleId, userId);
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -179,49 +189,20 @@ public class PatientDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		PatientDTO other = (PatientDTO) obj;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (age != other.age)
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (gender != other.gender)
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		return true;
+		return Objects.equals(address, other.address) && age == other.age && Objects.equals(createdOn, other.createdOn)
+				&& Objects.equals(email, other.email) && Objects.equals(firstName, other.firstName)
+				&& Objects.equals(gender, other.gender) && Objects.equals(id, other.id) && isActive == other.isActive
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(modifiedOn, other.modifiedOn)
+				&& Objects.equals(password, other.password) && Objects.equals(roleId, other.roleId)
+				&& Objects.equals(userId, other.userId);
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	
 	@Override
 	public String toString() {
 		return "PatientDTO [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age
-				+ ", gender=" + gender + ", address=" + address + ", email=" + email + ", password=" + password + "]";
+				+ ", gender=" + gender + ", address=" + address + ", email=" + email + ", password=" + password
+				+ ", userId=" + userId + ", isActive=" + isActive + ", roleId=" + roleId + ", createdOn=" + createdOn
+				+ ", modifiedOn=" + modifiedOn + "]";
 	}
 	
 }

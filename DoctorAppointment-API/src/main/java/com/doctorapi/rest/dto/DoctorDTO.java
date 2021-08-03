@@ -1,8 +1,10 @@
 package com.doctorapi.rest.dto;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import com.doctorapi.rest.models.Doctor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DoctorDTO {
 	
@@ -15,8 +17,28 @@ public class DoctorDTO {
 	private String password;
 	private Long userId;
 	private boolean isActive;
-	private Long roleId;
 	
+	@JsonIgnore
+	private Long roleId;
+	private Date createdOn;
+	private Date modifiedOn;
+	
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getModifiedOn() {
+		return modifiedOn;
+	}
+
+	public void setModifiedOn(Date modifiedOn) {
+		this.modifiedOn = modifiedOn;
+	}
 
 	public Long getRoleId() {
 		return roleId;
@@ -111,6 +133,9 @@ public class DoctorDTO {
 		this.isActive = doctor.getUser().isActive();
 		
 		this.roleId = doctor.getUser().getRole().getId();
+		
+		this.createdOn = doctor.getCreatedOn();
+		this.modifiedOn = doctor.getModifiedOn();
 	}
 
 	public DoctorDTO() {
@@ -121,13 +146,18 @@ public class DoctorDTO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((createdOn == null) ? 0 : createdOn.hashCode());
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + (isActive ? 1231 : 1237);
+		result = prime * result + ((modifiedOn == null) ? 0 : modifiedOn.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((roleId == null) ? 0 : roleId.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 		return result;
 	}
 
@@ -140,6 +170,11 @@ public class DoctorDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		DoctorDTO other = (DoctorDTO) obj;
+		if (createdOn == null) {
+			if (other.createdOn != null)
+				return false;
+		} else if (!createdOn.equals(other.createdOn))
+			return false;
 		if (date == null) {
 			if (other.date != null)
 				return false;
@@ -150,12 +185,22 @@ public class DoctorDTO {
 				return false;
 		} else if (!email.equals(other.email))
 			return false;
-		if (gender != other.gender)
+		if (gender == null) {
+			if (other.gender != null)
+				return false;
+		} else if (!gender.equals(other.gender))
 			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (isActive != other.isActive)
+			return false;
+		if (modifiedOn == null) {
+			if (other.modifiedOn != null)
+				return false;
+		} else if (!modifiedOn.equals(other.modifiedOn))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -167,18 +212,30 @@ public class DoctorDTO {
 				return false;
 		} else if (!password.equals(other.password))
 			return false;
+		if (roleId == null) {
+			if (other.roleId != null)
+				return false;
+		} else if (!roleId.equals(other.roleId))
+			return false;
 		if (status == null) {
 			if (other.status != null)
 				return false;
 		} else if (!status.equals(other.status))
 			return false;
+		if (userId == null) {
+			if (other.userId != null)
+				return false;
+		} else if (!userId.equals(other.userId))
+			return false;
 		return true;
 	}
+
 
 	@Override
 	public String toString() {
 		return "DoctorDTO [id=" + id + ", name=" + name + ", gender=" + gender + ", date=" + date + ", status=" + status
-				+ ", email=" + email + ", password=" + password + "]";
+				+ ", email=" + email + ", password=" + password + ", userId=" + userId + ", isActive=" + isActive
+				+ ", roleId=" + roleId + ", createdOn=" + createdOn + ", modifiedOn=" + modifiedOn + "]";
 	}
 	
 }
