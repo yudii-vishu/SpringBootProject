@@ -177,6 +177,8 @@ public class PatientServiceImpl {
 		if(patientDTO.getId()!=null) {
 			
 			patient = validateAndUpdate(patientDTO);
+			Optional<User> u = userDao.findById(patientDTO.getUserId());
+			patient.setModifiedBy(u.get().getEmail());
 			
 			patDTO = new PatientDTO(patientDao.save(patient));
 			if(patDTO!=null) {
@@ -213,6 +215,7 @@ public class PatientServiceImpl {
 				patient = new Patient(patientDTO);
 				patient.setActive(true);
 				patient.getUser().setId(id);
+				patient.setCreatedBy(userDao.findById(id).get().getEmail());
 				
 				patDTO = new PatientDTO(patientDao.save(patient));
 				if(patDTO!=null) {
