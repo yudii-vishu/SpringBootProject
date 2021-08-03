@@ -103,5 +103,10 @@ public class DoctorController {
 	}
 	
 	
+	@GetMapping("/doctor/createdDate/{createdOn}")
+	public List<DoctorDTO> getDoctorByCreatedOn(@PathVariable String createdOn) throws Exception {
+		return doctorServiceImpl.getDoctorByCreatedOn(createdOn);
+	}
+	
 	
 }
