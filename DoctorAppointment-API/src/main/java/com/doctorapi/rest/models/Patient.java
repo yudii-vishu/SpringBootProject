@@ -1,5 +1,8 @@
 package com.doctorapi.rest.models;
 
+import java.util.Date;
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,7 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -41,6 +47,20 @@ public class Patient {
 	@Column(name = "is_active")
 	private boolean isActive;
 	
+	@Column(name = "created_by")
+	private String createdBy;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "created_on")
+	private Date createdOn = new Date(System.currentTimeMillis()) ;
+	
+	@Column(name = "modified_by")
+	private String modifiedBy  ;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modified_on")
+	private Date modifiedOn = new Date();
+	
 	@NotNull
 	@Column(name = "gender")
 	@Enumerated(EnumType.STRING)
@@ -62,6 +82,12 @@ public class Patient {
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+//	
+	@PreUpdate
+	public void setLastUpdate() {
+		this.modifiedOn = new Date();
+	}
 	
 
 	public boolean isActive() {
@@ -144,7 +170,45 @@ public class Patient {
 		this.password = password;
 	}
 
-	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+
+	public Date getModifiedOn() {
+		return modifiedOn;
+	}
+
+
+	public void setModifiedOn(Date modifiedOn) {
+		this.modifiedOn = modifiedOn;
+	}
+
 
 	public Patient(PatientDTO patientDTO) throws Exception {
 		
@@ -174,9 +238,36 @@ public class Patient {
 	@Override
 	public String toString() {
 		return "Patient [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age
-				+ ", isActive=" + isActive + ", gender=" + gender + ", address=" + address + ", email=" + email
-				+ ", password=" + password + ", user=" + user + "]";
+				+ ", isActive=" + isActive + ", createdBy=" + createdBy + ", createdOn=" + createdOn + ", modifiedBy="
+				+ modifiedBy + ", modifiedOn=" + modifiedOn + ", gender=" + gender + ", address=" + address + ", email="
+				+ email + ", password=" + password + ", user=" + user + "]";
 	}
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(address, age, createdBy, createdOn, email, firstName, gender, id, isActive, lastName,
+				modifiedBy, modifiedOn, password, user);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Patient other = (Patient) obj;
+		return Objects.equals(address, other.address) && age == other.age && Objects.equals(createdBy, other.createdBy)
+				&& Objects.equals(createdOn, other.createdOn) && Objects.equals(email, other.email)
+				&& Objects.equals(firstName, other.firstName) && gender == other.gender && Objects.equals(id, other.id)
+				&& isActive == other.isActive && Objects.equals(lastName, other.lastName)
+				&& Objects.equals(modifiedBy, other.modifiedBy) && Objects.equals(modifiedOn, other.modifiedOn)
+				&& Objects.equals(password, other.password) && Objects.equals(user, other.user);
+	}
+	
 	
 
 }
