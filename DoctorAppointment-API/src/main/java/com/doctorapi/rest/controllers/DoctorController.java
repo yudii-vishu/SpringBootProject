@@ -103,8 +103,16 @@ public class DoctorController {
 	}
 	
 	
+	/**
+	 * @param createdOn
+	 * 
+	 * @return This controller will provide the list of doctor's created on particular date
+	 * 
+	 * @throws Exception
+	 */
 	@GetMapping("/doctor/createdDate/{createdOn}")
 	public List<DoctorDTO> getDoctorByCreatedOn(@PathVariable String createdOn) throws Exception {
+		
 		return doctorServiceImpl.getDoctorByCreatedOn(createdOn);
 	}
 	
