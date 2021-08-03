@@ -1,5 +1,8 @@
 package com.doctorapi.rest.services;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,8 +23,6 @@ import com.doctorapi.rest.repositories.DoctorDao;
 import com.doctorapi.rest.repositories.RoleDao;
 import com.doctorapi.rest.repositories.UserDao;
 import com.doctorapi.restutil.CommonUtils;
-
-import javassist.NotFoundException;
 
 @Service
 public class DoctorServiceImpl {
@@ -115,10 +116,10 @@ public class DoctorServiceImpl {
 			logger.error("Please enter the date (yyyy-MM-dd)");
 			throw new Exception ("Please enter the date (yyyy-MM-dd)"); 
 		}
-		if(doctorDTO.getRoleId()==null || doctorDTO.getRoleId()==0 || doctorDTO.getRoleId()==1) {
-			logger.info("roleId Invalid.Please enter roleId 2 for doctor.");
-			throw new Exception ("roleId Invalid.Please enter roleId 2 for doctor.");
-		}
+//		if(doctorDTO.getRoleId()==null || doctorDTO.getRoleId()==0 || doctorDTO.getRoleId()==1) {
+//			logger.info("roleId Invalid.Please enter roleId 2 for doctor.");
+//			throw new Exception ("roleId Invalid.Please enter roleId 2 for doctor.");
+//		}
 	}
 	
 	
@@ -188,6 +189,8 @@ public class DoctorServiceImpl {
 		 if(doctorDTO.getId()!=null) {
 			 
 			 doctor = validateAndUpdate(doctorDTO);
+			 Optional<User> u = userDao.findById(doctorDTO.getUserId());
+			 doctor.setModifiedBy(u.get().getEmail());
 			 
 			 docDTO=new DoctorDTO(doctorDao.save(doctor));
 			 if(docDTO!=null) {
@@ -206,7 +209,7 @@ public class DoctorServiceImpl {
 			 u.setPassword(doctorDTO.getPassword());
 			 u.setActive(doctorDTO.isActive());
 			 Role r = new Role();
-			 r.setId(doctorDTO.getRoleId());
+			 r.setId(2L);
 			 u.setRole(r);
 			 
 			 if(r.getId()== 1) {
@@ -220,6 +223,7 @@ public class DoctorServiceImpl {
 				 doctor = new Doctor(doctorDTO);
 				 doctor.setActive(true);
 				 doctor.getUser().setId(id);
+				 doctor.setCreatedBy(userDao.findById(id).get().getEmail());
 				 
 				 docDTO=new DoctorDTO(doctorDao.save(doctor));
 				 if(docDTO!=null) {
@@ -313,6 +317,24 @@ public class DoctorServiceImpl {
 		doctor.setGender(Gender.getEnum(doctorDTO.getGender()));
 		logger.info("Returning doctor after validating doctorDTO object to update.");
 		return doctor;
+	}
+
+
+	/**
+	 * @param createdOn
+	 * 
+	 * @return This method will provide the list of doctor's who registered themselves w.r.t the createdDate.
+	 * 
+	 * @throws Exception
+	 */
+	public List<DoctorDTO> getDoctorByCreatedOn(String createdOn) throws Exception {
+
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date date = formatter.parse(createdOn);
+		
+		List<DoctorDTO> doctorDTOList = doctorDao.findByCreatedOn(date).stream().map(DoctorDTO::new).collect(Collectors.toList());
+		return doctorDTOList;
 	}
 	
 	

@@ -122,10 +122,10 @@ public class PatientServiceImpl {
 			logger.info("Enter the valid gender type."); 
 			throw new Exception ("Enter the valid gender type.");
 		}
-		if(patientDTO.getRoleId()==null || patientDTO.getRoleId()==0 || patientDTO.getRoleId()==2) {
-			logger.info("roleId Invalid.Please enter roleId 1 for patient.");
-			throw new Exception ("roleId Invalid.Please enter roleId 1 for patient.");
-		}
+//		if(patientDTO.getRoleId()==null || patientDTO.getRoleId()==0 || patientDTO.getRoleId()==2) {
+//			logger.info("roleId Invalid.Please enter roleId 1 for patient.");
+//			throw new Exception ("roleId Invalid.Please enter roleId 1 for patient.");
+//		}
 	}
 	
 	
@@ -198,7 +198,7 @@ public class PatientServiceImpl {
 			u.setActive(patientDTO.isActive());
 			
 			Role r = new Role();
-			r.setId(patientDTO.getRoleId());
+			r.setId(1L);
 			u.setRole(r);
 			
 			if(r.getId()==2) {
