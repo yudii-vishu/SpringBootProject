@@ -95,6 +95,10 @@ public class AppointmentServiceImpl {
 			logger.error("Please enter the appointmentDate (yyyy-MM-dd)");
 			throw new Exception ("Please enter the appointmentDate (yyyy-MM-dd)"); 
 		}
+		if(appointmentDTO.getAppointmentSlot()==null || appointmentDTO.getAppointmentSlot().equals("")) {
+			logger.error("Please enter valid appointmentSlot (hh:mm:ss)");
+			throw new Exception("Please enter valid appointmentSlot (hh:mm:ss)");
+		}
 		
 	}
 	
@@ -126,10 +130,10 @@ public class AppointmentServiceImpl {
 			
 			appointment = validateAndUpdate(appointmentDTO);
 		}else {
-			if(appointmentDao.findByReason(appointmentDTO.getReason())!=null) {
-				logger.info("AppointmentReason is already exist.Please enter valid reason");
-				 throw new Exception ("AppointmentReason is already exist.Please enter valid reason");
-			}
+//			if(appointmentDao.findByReason(appointmentDTO.getReason())!=null) {
+//				logger.info("AppointmentReason is already exist.Please enter valid reason");
+//				 throw new Exception ("AppointmentReason is already exist.Please enter valid reason");
+//			}
 			appointment = new Appointment(appointmentDTO);
 		}
 		return new AppointmentDTO(appointmentDao.save(appointment));
@@ -187,6 +191,7 @@ public class AppointmentServiceImpl {
 		appointmentDTO.setId(appointment.getId());
 		appointmentDTO.setAction(appointment.getAction().getAction());
 		appointmentDTO.setAppointmnetDate(appointment.getAppointmnetDate());
+		appointmentDTO.setAppointmentSlot(appointment.getAppointmentSlot());
 		appointmentDTO.setReason(appointment.getReason());
 		appointmentDTO.setPatientId(appointment.getPatient().getId());
 		appointmentDTO.setPatientFirstName(appointment.getPatient().getFirstName());
@@ -238,6 +243,9 @@ public class AppointmentServiceImpl {
 		
 		if(appointmentDTO.getAppointmnetDate()!=null) {
 			appointment.setAppointmnetDate(appointmentDTO.getAppointmnetDate());
+		}
+		if(appointmentDTO.getAppointmentSlot()!=null) {
+			appointment.setAppointmentSlot(appointmentDTO.getAppointmentSlot());
 		}
 		if(appointment.getReason().equals(appointmentDTO.getReason())) {
 			 logger.info("AppointmentReason is already exist.");
