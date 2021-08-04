@@ -1,6 +1,7 @@
 package com.doctorapi.rest.models;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 import com.doctorapi.rest.Enum.Action;
 import com.doctorapi.rest.dto.AppointmentDTO;
@@ -37,6 +36,11 @@ public class Appointment {
 	@JsonFormat(pattern = "yyyy-MM-dd", shape = Shape.STRING)
 	@Column(name = "appointment_date")
 	private LocalDate appointmnetDate;
+	
+	@JsonFormat(pattern = "hh:mm:ss", shape = Shape.STRING)
+	@Column(name = "appointment_slot")
+	@NotNull
+	private LocalTime appointmentSlot;
 	
 	@NotNull
 	@Column(name = "status")
@@ -98,12 +102,23 @@ public class Appointment {
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
+	
+	public LocalTime getAppointmentSlot() {
+		return appointmentSlot;
+	}
+
+	public void setAppointmentSlot(LocalTime appointmentSlot) {
+		this.appointmentSlot = appointmentSlot;
+	}
+	
+	
 
 	public Appointment(AppointmentDTO appointmentDTO) throws Exception {
 		super();
 
 		this.reason = appointmentDTO.getReason();
 		this.appointmnetDate = appointmentDTO.getAppointmnetDate();
+		this.appointmentSlot = appointmentDTO.getAppointmentSlot();
 		
 		Patient p=new Patient();
 		p.setId(appointmentDTO.getPatientId());
@@ -125,8 +140,9 @@ public class Appointment {
 
 	@Override
 	public String toString() {
-		return "Appointment [id=" + id + ", reason=" + reason + ", appointmnetDate=" + appointmnetDate + ", action="
-				+ action + ", patient=" + patient + ", doctor=" + doctor + "]";
+		return "Appointment [id=" + id + ", reason=" + reason + ", appointmnetDate=" + appointmnetDate
+				+ ", appointmentSlot=" + appointmentSlot + ", action=" + action + ", patient=" + patient + ", doctor="
+				+ doctor + "]";
 	}
 
 
