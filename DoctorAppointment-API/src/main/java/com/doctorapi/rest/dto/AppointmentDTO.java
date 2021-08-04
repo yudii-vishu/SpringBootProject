@@ -1,6 +1,7 @@
 package com.doctorapi.rest.dto;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import com.doctorapi.rest.models.Appointment;
 
@@ -10,6 +11,7 @@ public class AppointmentDTO {
 	private Long id;
 	private String reason;
 	private LocalDate appointmnetDate;
+	private LocalTime appointmentSlot;
 	private String action;
 	private Long patientId;
 	private String patientFirstName;
@@ -72,12 +74,21 @@ public class AppointmentDTO {
 	public void setDoctorName(String doctorName) {
 		this.doctorName = doctorName;
 	}
+	public LocalTime getAppointmentSlot() {
+		return appointmentSlot;
+	}
+	public void setAppointmentSlot(LocalTime appointmentSlot) {
+		this.appointmentSlot = appointmentSlot;
+	}
+	
+	
 	
 	public AppointmentDTO(Appointment appointment) {
 		super();
 		this.id = appointment.getId();
 		this.reason = appointment.getReason();
 		this.appointmnetDate = appointment.getAppointmnetDate();
+		this.appointmentSlot = appointment.getAppointmentSlot();
 		this.action = appointment.getAction().getAction();
 		this.patientId = appointment.getPatient().getId();
 		this.doctorId = appointment.getDoctor().getId();
@@ -164,9 +175,10 @@ public class AppointmentDTO {
 	}
 	@Override
 	public String toString() {
-		return "AppointmentDTO [id=" + id + ", reason=" + reason + ", appointmnetDate=" + appointmnetDate + ", action="
-				+ action + ", patientId=" + patientId + ", patientFirstName=" + patientFirstName + ", patientLastName="
-				+ patientLastName + ", doctorId=" + doctorId + ", doctorName=" + doctorName + "]";
+		return "AppointmentDTO [id=" + id + ", reason=" + reason + ", appointmnetDate=" + appointmnetDate
+				+ ", appointmentSlot=" + appointmentSlot + ", action=" + action + ", patientId=" + patientId
+				+ ", patientFirstName=" + patientFirstName + ", patientLastName=" + patientLastName + ", doctorId="
+				+ doctorId + ", doctorName=" + doctorName + "]";
 	}
 	
 }
