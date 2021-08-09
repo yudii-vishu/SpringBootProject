@@ -126,5 +126,10 @@ public class AppointmentController {
 		
 		return appointmentServiceImpl.getAppointmentById(appointmentId);
 	}
+	
+
+//public List<AppointmentDTO> getAppointmentByDate() {
+//		return appointmentServiceImpl.getAppointmentByDate(appointmentDate);
+//	}
  	
 }
