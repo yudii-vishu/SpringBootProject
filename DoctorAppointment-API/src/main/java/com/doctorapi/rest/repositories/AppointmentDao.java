@@ -24,6 +24,7 @@ public interface AppointmentDao extends JpaRepository<Appointment, Long> {
 
 	public Appointment findByReason(String reason);
 	
+//	public List<Appointment> findByAppointmnetDate();
 
 	
 
