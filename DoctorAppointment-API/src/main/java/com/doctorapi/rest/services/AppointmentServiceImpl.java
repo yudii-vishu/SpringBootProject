@@ -79,7 +79,7 @@ public class AppointmentServiceImpl {
 			logger.info("Appointment action should not be null or blank.");
 			throw new Exception ("Appointment action should not be null or blank.");
 		}
-		if(appointmentDTO.getDoctorId()==null || appointmentDTO.getDoctorId()==0) {
+		if(appointmentDTO.getDoctorId()==null || appointmentDTO.getDoctorId()<0) {
 			logger.info("doctorId must be greater than 0.It should not be null/empty");
 			throw new Exception ("doctorId must be greater than 0.It should not be null/empty");
 		}
@@ -87,7 +87,7 @@ public class AppointmentServiceImpl {
 			logger.error("Appointment reason should not be null or blank.");
 			throw new Exception("Appointment reason should not be null or blank.");
 		}
-		if(appointmentDTO.getPatientId()==null || appointmentDTO.getPatientId()==0) {
+		if(appointmentDTO.getPatientId()==null || appointmentDTO.getPatientId()<0) {
 			logger.error("patientId must be greater than 0.It should not be null/empty");
 			throw new Exception ("patientId must be greater than 0.It should not be null/empty");
 		}
