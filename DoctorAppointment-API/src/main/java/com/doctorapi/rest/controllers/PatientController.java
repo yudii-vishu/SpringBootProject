@@ -1,5 +1,6 @@
 package com.doctorapi.rest.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -10,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorapi.rest.dto.PatientDTO;
@@ -69,5 +70,18 @@ public class PatientController {
 		return msg;
 	}
 	
+	
+	@GetMapping("/patients")
+	public List<PatientDTO> getPatientByCreatedOn(@RequestParam LocalDateTime createdOn) throws Exception {
+		
+		return patientServiceImpl.getPatientByCreatedOn(createdOn);
+	}
+	
+	
+	@GetMapping("/patient/modifiedDate/{modifiedOn}")
+	public List<PatientDTO> getPatientByModifiedOn(@PathVariable String modifiedOn) throws Exception {
+		
+		return patientServiceImpl.getPatientByModifiedOn(modifiedOn);
+	}
 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorapi.rest.Enum.Status;
@@ -110,11 +111,23 @@ public class DoctorController {
 	 * 
 	 * @throws Exception
 	 */
-	@GetMapping("/doctor/createdDate/{createdOn}")
-	public List<DoctorDTO> getDoctorByCreatedOn(@PathVariable String createdOn) throws Exception {
+	@GetMapping("/doctors")
+	public List<DoctorDTO> getDoctorByCreatedOn(@RequestParam("createdDate") String createdOn) throws Exception {
 		
 		return doctorServiceImpl.getDoctorByCreatedOn(createdOn);
 	}
 	
+	/**
+	 * @param modifiedOn
+	 * 
+	 * @return This controller will provide the list of doctor's modified on particular date
+	 * 
+	 * @throws Exception
+	 */
+	@GetMapping("/doctor/modifiedDate/{modifiedOn}")
+	public List<DoctorDTO> getDoctorByModifiedOn(@PathVariable String modifiedOn) throws Exception {
+		
+		return doctorServiceImpl.getDoctorByModifiedOn(modifiedOn);
+	}
 	
 }

@@ -1,7 +1,5 @@
 package com.doctorapi.rest.controllers;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,6 +48,8 @@ public class AppointmentController {
 
 		return appointmentServiceImpl.getAppointmentByDoctorId(doctorId);
 	}
+	
+	
 
 	/**
 	 * @param patientId
@@ -127,9 +126,5 @@ public class AppointmentController {
 		return appointmentServiceImpl.getAppointmentById(appointmentId);
 	}
 	
-
-//public List<AppointmentDTO> getAppointmentByDate() {
-//		return appointmentServiceImpl.getAppointmentByDate(appointmentDate);
-//	}
  	
 }
