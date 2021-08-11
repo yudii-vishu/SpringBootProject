@@ -1,6 +1,7 @@
 package com.doctorapi.rest.repositories;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +17,9 @@ public interface PatientDao extends JpaRepository<Patient, Long>{
 	public Patient findByEmail(String email);
 
 	public Patient findByUserId(Long userId);
+
+	public List<Patient> findByCreatedOn(LocalDateTime createdOn);
+
+	public List<Patient> findByModifiedOn(LocalDateTime localDateTime);
 
 }

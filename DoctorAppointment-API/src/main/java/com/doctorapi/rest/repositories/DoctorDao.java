@@ -1,7 +1,7 @@
 package com.doctorapi.rest.repositories;
 
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,7 +24,9 @@ public interface DoctorDao extends JpaRepository<Doctor, Long> {
 	@Query("SELECT dd from doctor dd where dd.status=?1")
 	public List<Doctor> findByOrderByStatus(Status status);
 
-	public List<Doctor> findByCreatedOn(Date date);
+	public List<Doctor> findByCreatedOn(LocalDateTime localDateTime);
+
+	public List<Doctor> findByModifiedOn(LocalDateTime localDateTime);
 
 
 	
