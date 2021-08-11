@@ -1,10 +1,9 @@
 package com.doctorapi.rest.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import com.doctorapi.rest.models.Patient;
-import com.doctorapi.rest.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PatientDTO {
@@ -21,8 +20,8 @@ public class PatientDTO {
 	private boolean isActive;
 	@JsonIgnore
 	private Long roleId;
-	private Date createdOn;
-	private Date modifiedOn;
+	private LocalDateTime createdOn;
+	private LocalDateTime modifiedOn;
 	
 	
 	public Long getRoleId() {
@@ -140,18 +139,18 @@ public class PatientDTO {
 		this.password = password;
 	}
 	
-	public Date getCreatedOn() {
+	public LocalDateTime getCreatedOn() {
 		return createdOn;
 	}
-	public void setCreatedOn(Date createdOn) {
+	public void setCreatedOn(LocalDateTime createdOn) {
 		this.createdOn = createdOn;
 	}
-	public Date getModifiedOn() {
+	public LocalDateTime getModifiedOn() {
 		return modifiedOn;
 	}
-	public void setModifiedOn(Date modifiedOn) {
+	public void setModifiedOn(LocalDateTime modifiedOn) {
 		this.modifiedOn = modifiedOn;
-	}
+	}  
 	
 	
 	public PatientDTO(Patient patient) {
