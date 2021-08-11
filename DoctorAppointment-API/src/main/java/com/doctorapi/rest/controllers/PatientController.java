@@ -63,11 +63,10 @@ public class PatientController {
 	 * @throws Exception 
 	 */
 	@PostMapping("/patient")
-	public String saveAndUpdate(@Valid @RequestBody PatientDTO patientDTO) throws Exception {
+	public PatientDTO saveAndUpdate(@Valid @RequestBody PatientDTO patientDTO) throws Exception {
 		
 		logger.info("To save patient");
-		String msg = patientServiceImpl.saveAndUpdate(patientDTO);
-		return msg;
+		return patientServiceImpl.saveAndUpdate(patientDTO);
 	}
 	
 	

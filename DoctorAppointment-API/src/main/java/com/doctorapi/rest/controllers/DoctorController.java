@@ -79,12 +79,11 @@ public class DoctorController {
 	 * @throws Exception 
 	 */
 	@PostMapping("/doctor")
-	public String saveAndUpdate(@Valid @RequestBody DoctorDTO doctorDTO) throws Exception {
+	public DoctorDTO saveAndUpdate(@Valid @RequestBody DoctorDTO doctorDTO) throws Exception {
 		
 		logger.info("To save doctor");
-		String msg = doctorServiceImpl.saveAndUpdate(doctorDTO);
+		return doctorServiceImpl.saveAndUpdate(doctorDTO);
 		
-		return msg;
 		}
 	
 		
@@ -102,6 +101,8 @@ public class DoctorController {
 		
 		doctorServiceImpl.deleteDoctor(doctorId);
 	}
+	
+	
 	
 	
 	/**
