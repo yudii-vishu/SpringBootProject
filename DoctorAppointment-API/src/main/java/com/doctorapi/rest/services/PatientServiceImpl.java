@@ -1,5 +1,7 @@
 package com.doctorapi.rest.services;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,11 +18,9 @@ import com.doctorapi.rest.models.Patient;
 import com.doctorapi.rest.models.Role;
 import com.doctorapi.rest.models.User;
 import com.doctorapi.rest.repositories.PatientDao;
-import com.doctorapi.rest.repositories.RoleDao;
 import com.doctorapi.rest.repositories.UserDao;
 import com.doctorapi.restutil.CommonUtils;
 
-import javassist.NotFoundException;
 
 
 @Service
@@ -34,52 +34,9 @@ public class PatientServiceImpl {
 	@Autowired
 	private UserDao userDao;
 	
-	@Autowired
-	private RoleDao roleDao;
 	
 	
 	
-	/**
-	 * @param patient
-	 * 
-	 * This method will validate Patient object
-	 * 
-	 * @throws Exception
-	 */
-	private void validatePatient(Patient patient) throws Exception {
-		logger.info("To validate patient object to save.");
-		
-		if(StringUtils.isBlank(patient.getFirstName()) || patient.getFirstName().length()>=10) {
-			logger.error("Please enter your firstName and length must be less than 10");
-			throw new Exception("Please enter your firstName and length must be less than 10");
-		}
-		if(StringUtils.isBlank(patient.getLastName()) || patient.getLastName().length()>=10) {
-			logger.error("Please enter your lastName and length must be less than 10");
-			throw new Exception("Please enter your lastName and length must be less than 10");
-		}
-		if(StringUtils.isBlank(patient.getEmail()) || !CommonUtils.validateEmail(patient.getEmail()) || 
-				patient.getEmail().length() > 50) {
-			logger.error("Please enter valid email address.");
-			throw new Exception("Please enter valid email address.");
-		}
-		if(StringUtils.isBlank(patient.getPassword()) || !CommonUtils.validatePassword(patient.getPassword()) ||
-				patient.getPassword().length() > 60) {
-			logger.info("Please enter valid password.");
-			throw new Exception("Please enter valid password.");
-		}
-		if(StringUtils.isBlank(patient.getAddress())) {
-			logger.error("Please enter your address.");
-			throw new Exception ("Please enter your address.");
-		}
-		if(StringUtils.isBlank(patient.getGender().getGender())) {
-			logger.error("Please enter your gender.");
-			throw new Exception ("Please enter your gender.");
-		}
-		if(patient.getAge()<0 || patient.getAge()==0) {
-			logger.info("Age must be greater than 0.It should not be null.");
-			throw new Exception ("Age must be greater than 0.It should not be null.");
-		}
-	}
 	
 	/**
 	 * @param patientDTO
@@ -122,10 +79,6 @@ public class PatientServiceImpl {
 			logger.info("Enter the valid gender type."); 
 			throw new Exception ("Enter the valid gender type.");
 		}
-//		if(patientDTO.getRoleId()==null || patientDTO.getRoleId()==0 || patientDTO.getRoleId()==2) {
-//			logger.info("roleId Invalid.Please enter roleId 1 for patient.");
-//			throw new Exception ("roleId Invalid.Please enter roleId 1 for patient.");
-//		}
 	}
 	
 	
@@ -149,9 +102,7 @@ public class PatientServiceImpl {
 	public PatientDTO getPatientById(Long patientId) throws Exception{
 		
 		Patient patient = validateAndGetPatient(patientId);
-//		if(patient.getId()==null) {
-//			throw new Exception("Patient Id is not present.");
-//		}
+
 		return new PatientDTO(patient);
 	}
 	
@@ -164,13 +115,11 @@ public class PatientServiceImpl {
 	 * 
 	 * @throws Exception
 	 */
-	public String saveAndUpdate(PatientDTO patientDTO) throws Exception {
+	public PatientDTO saveAndUpdate(PatientDTO patientDTO) throws Exception {
 		
 		logger.info("To save patient and update detail.");
 		
 		PatientDTO patDTO = null;
-		String message = null;
-		
 		validatePatientDTO(patientDTO);
 		Patient patient;
 		
@@ -182,7 +131,7 @@ public class PatientServiceImpl {
 			
 			patDTO = new PatientDTO(patientDao.save(patient));
 			if(patDTO!=null) {
-				message = "Updated Successfully";
+				logger.info("Updated Successfully");
 			}
 			
 		}else {
@@ -202,13 +151,6 @@ public class PatientServiceImpl {
 			Role r = new Role();
 			r.setId(1L);
 			u.setRole(r);
-			
-			if(r.getId()==2) {
-				
-				logger.info("RoleName does not match to the patient.");
-				 message= "RoleName does not match to the patient.";
-				 
-			}else if(r.getId()==1) {
 				
 				Long id = userDao.save(u).getId();
 				
@@ -219,47 +161,12 @@ public class PatientServiceImpl {
 				
 				patDTO = new PatientDTO(patientDao.save(patient));
 				if(patDTO!=null) {
-					message = "Saved Successfully";
+					logger.info("Saved Successfully");
 				}
-			}else {
-					message="Invalid role";
-				}
-				
 			}
-			return message;
+			return patDTO;
 		}
 
-	
-	
-	/**
-	 * @param patientDTO
-	 * 
-	 * This method will validate updatePatientDTO object
-	 * 
-	 * @throws Exception
-	 */
-	private void validateUpdatePatientDTO(PatientDTO patientDTO) throws Exception {
-		
-		if(patientDTO.getId()==null || patientDTO.getId().equals(" ")) {
-			throw new Exception("PatientId should not be null or empty.");
-		}
-		if(StringUtils.isBlank(patientDTO.getPassword())) {
-			throw new Exception("Password must not be null or empty.");
-		}
-		if(StringUtils.isBlank(patientDTO.getEmail())) {
-			throw new Exception("Email must not be null or empty.");
-		}
-		if(StringUtils.isBlank(patientDTO.getFirstName())) {
-			throw new Exception ("First Name is compulsory.");
-		}
-		if(StringUtils.isBlank(patientDTO.getLastName())) {
-			throw new Exception ("Last Name is compulsory.");
-		}
-		if(StringUtils.isBlank(patientDTO.getGender())) {
-			throw new Exception ("Gender not be null or empty.");
-		}
-		
-	}
 	
 	
 	/**
@@ -308,10 +215,6 @@ public class PatientServiceImpl {
 			logger.info("Pleasem enter valid userId.");
 			throw new Exception ("Please enter valid userId.");
 		}
-//		if(patientDTO.getRoleId()==null || patientDTO.getRoleId()==0 || patientDTO.getRoleId()==2) {
-//			logger.info("Please enter roleId 1 for patient.");
-//			throw new Exception ("Please enter roleId 1 for patient.");
-//		}
 		if(patientDTO.getEmail()!=null) {
 			patient.setEmail(patientDTO.getEmail());
 		}
@@ -321,12 +224,58 @@ public class PatientServiceImpl {
 		if(patientDTO.getPassword()!=null) {
 			patient.setPassword(patientDTO.getPassword());
 		}
+		if(patientDTO.getAge()<0 || patient.getAge()==0) {
+			logger.info("Age must be greater then 0.Please enter valid age.");
+			throw new Exception("Age must be greater then 0.Please enter valid age.");
+		}
 		if(patientDTO.getAge()!=0) {
 			patient.setAge(patientDTO.getAge());
 		}
 		patient.setGender(Gender.getEnum(patientDTO.getGender()));
 		logger.info("Returning patient after validating patientDTO object to update.");
 		return patient;
+	}
+
+	
+	
+	/**
+	 * @param createdOn
+	 * 
+	 * @return This method provide the lis of patient regarding createdDate.
+	 * 
+	 */
+	public List<PatientDTO> getPatientByCreatedOn(LocalDateTime createdOn) {
+
+//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//		
+////		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+////		DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_DATE_TIME;
+//		
+//		// convert string into Localdatetime format.....
+//		LocalDateTime localDateTime = LocalDate.parse(createdOn, dtf).atStartOfDay();
+//		System.out.println("Date :"+localDateTime);
+		
+		List<PatientDTO> patientDTOList = patientDao.findByCreatedOn(createdOn).stream().map(PatientDTO::new).collect(Collectors.toList());
+		return patientDTOList;
+	}
+
+	
+	/**
+	 * @param modifiedOn
+	 * 
+	 * @return This method provide the lis of patient regarding modifiedDate.
+	 * 
+	 */
+	public List<PatientDTO> getPatientByModifiedOn(String modifiedOn) {
+
+		DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_DATE_TIME;
+		
+		// convert string into Localdatetime format.....
+		LocalDateTime localDateTime = LocalDateTime.parse(modifiedOn, dateTimeFormat);
+		System.out.println("Date :"+localDateTime);
+		
+		List<PatientDTO> patientDTOList = patientDao.findByModifiedOn(localDateTime).stream().map(PatientDTO::new).collect(Collectors.toList());
+		return patientDTOList;
 	} 
 	
 	

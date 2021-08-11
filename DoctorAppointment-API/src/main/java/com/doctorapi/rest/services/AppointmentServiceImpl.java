@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 
 import com.doctorapi.rest.Enum.Action;
 import com.doctorapi.rest.dto.AppointmentDTO;
-import com.doctorapi.rest.dto.DoctorDTO;
 import com.doctorapi.rest.models.Appointment;
 import com.doctorapi.rest.models.Doctor;
+import com.doctorapi.rest.models.Patient;
 import com.doctorapi.rest.repositories.AppointmentDao;
-import com.doctorapi.rest.repositories.DoctorDao;
+import com.doctorapi.rest.repositories.PatientDao;
 
 
 @Service
@@ -29,39 +29,9 @@ public class AppointmentServiceImpl {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	
+	@Autowired
+	private PatientDao patientDao;
 	
-	
-	/**
-	 * @param appointment
-	 * 
-	 * This method will validate appointment object
-	 * 
-	 * @throws Exception
-	 */
-	private void validateAppointment(Appointment appointment) throws Exception {
-		
-		logger.info("To validate appointment object to save.");
-		if(StringUtils.isBlank(appointment.getAction().getAction())) {
-			logger.error("Please enter action 'BOOK' ");
-			throw new Exception("Please enter action 'BOOK' ");
-		}
-		if(appointment.getAppointmnetDate()==null || appointment.getAppointmnetDate().equals("")) {
-			logger.error("Please enter the formated date (yyyy-MM-dd)");
-			throw new Exception("Please enter the formated date (yyyy-MM-dd)");
-		}
-		if(StringUtils.isBlank(appointment.getReason())) {
-			logger.error("Please enter your valid reason for Appointment.");
-			throw new Exception ("Please enter your valid reason for Appointment.");
-		}
-		if(appointment.getPatient().getId() == null || appointment.getPatient().getId()==0) {
-			logger.error("Please enter the patient Id.");
-			throw new Exception ("Please enter the patient Id.");
-		}
-		if(appointment.getDoctor().getId() == null || appointment.getDoctor().getId()==0) {
-			logger.error("Please enter the doctor Id.");
-			throw new Exception ("Please enter the doctor Id.");
-		}
-	}
 	
 	
 	/**
@@ -130,13 +100,16 @@ public class AppointmentServiceImpl {
 			
 			appointment = validateAndUpdate(appointmentDTO);
 		}else {
-//			if(appointmentDao.findByReason(appointmentDTO.getReason())!=null) {
-//				logger.info("AppointmentReason is already exist.Please enter valid reason");
-//				 throw new Exception ("AppointmentReason is already exist.Please enter valid reason");
-//			}
+			
 			appointment = new Appointment(appointmentDTO);
 		}
 		return new AppointmentDTO(appointmentDao.save(appointment));
+		
+//		Patient pat = new Patient();
+//		Doctor doc = new Doctor();
+//		doc.setId(appointmentDTO.getDoctorId());
+//		pat.setDoctor(doc);
+			
 	}
 		
 	

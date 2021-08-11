@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.doctorapi.rest.dto.UserDTO;
 import com.doctorapi.rest.models.User;
 import com.doctorapi.rest.repositories.UserDao;
-import com.doctorapi.restutil.CommonUtils;
 
 @Service
 public class UserService {
@@ -23,42 +21,6 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	
-	/**
-	 * @param userDTO
-	 * 
-	 * This method will validate userDTO object
-	 * 
-	 * @throws Exception
-	 */
-	private void validateUserDTO(UserDTO userDTO) throws Exception {
-		
-		logger.info("To validate UserDTO object to save.");
-		
-		if(StringUtils.isBlank(userDTO.getEmail()) || !CommonUtils.validateEmail(userDTO.getEmail()) 
-				|| userDTO.getEmail().length()>65) {
-			logger.info("Please enter valid email.");
-			throw new Exception ("Please enter valid email.");
-		}
-		if(StringUtils.isBlank(userDTO.getPassword()) || !CommonUtils.validatePassword(userDTO.getPassword())
-				|| userDTO.getPassword().length()>40) {
-			logger.info("Please enter valid password.");
-			throw new Exception ("Please enter valid password.");
-		}
-		if(StringUtils.isBlank(userDTO.getConfirmPassword()) || !CommonUtils.validatePassword(userDTO.getConfirmPassword())
-				|| userDTO.getConfirmPassword().length()>40) {
-			logger.info("Please enter valid confirmPassword.");
-			throw new Exception ("Please enter valid confirmPassword.");
-		}
-		if(!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
-			logger.info("Password not matched.");
-			throw new Exception ("Password not matched.");
-		}
-		if(userDTO.getRoleId()==null || userDTO.getRoleId()==0) {
-			logger.info("roleId must be greater than 0.It should 1(patient) & 2(doctor) but not be null/empty");
-			throw new Exception ("roleId must be greater than 0.It should 1(patient) & 2(doctor) but not be null/empty");
-		}
-	}
 	
 	
 	/**

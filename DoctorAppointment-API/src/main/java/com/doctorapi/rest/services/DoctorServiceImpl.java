@@ -1,8 +1,7 @@
 package com.doctorapi.rest.services;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,7 +19,6 @@ import com.doctorapi.rest.models.Doctor;
 import com.doctorapi.rest.models.Role;
 import com.doctorapi.rest.models.User;
 import com.doctorapi.rest.repositories.DoctorDao;
-import com.doctorapi.rest.repositories.RoleDao;
 import com.doctorapi.rest.repositories.UserDao;
 import com.doctorapi.restutil.CommonUtils;
 
@@ -35,48 +33,6 @@ public class DoctorServiceImpl {
 	
 	@Autowired
 	private UserDao userDao;
-	
-	@Autowired 
-	private RoleDao roleDao;
-	
-
-	/**
-	 * @param doctor
-	 * 
-	 * This method will validate doctor object
-	 * 
-	 * @throws Exception
-	 */
-	private void validateDoctor(Doctor doctor) throws Exception {
-		
-		logger.info("To validate doctor object to save.");
-		if(StringUtils.isBlank(doctor.getName()) || doctor.getName().length() > 20) {
-			logger.error("Please enter doctorName.");
-			throw new Exception("Please enter doctorName.");
-		}
-		if(StringUtils.isBlank(doctor.getEmail()) || !CommonUtils.validateEmail(doctor.getEmail()) || 
-				doctor.getEmail().length() > 50) {
-			logger.error("Please enter valid email address.");
-			throw new Exception("Please enter email address.");
-		}
-		if(StringUtils.isBlank(doctor.getPassword()) || !CommonUtils.validatePassword(doctor.getPassword()) ||
-				doctor.getPassword().length() > 60) {
-			logger.error("Please enter valid password.");
-			throw new Exception("Please enter the password.");
-		}
-		if(StringUtils.isBlank(doctor.getStatus().getStatus())) {
-			logger.error("Please enter your status (available / Not available).");
-			throw new Exception ("Please enter your status (available / Not available).");
-		}
-		if(StringUtils.isBlank(doctor.getGender().getGender())) {
-			logger.error("Please enter your gender.");
-			throw new Exception ("Please enter your gender.");
-		}
-		if(doctor.getDate()==null || doctor.getDate().equals("")) {
-			logger.error("Please enter the date (yyyy-MM-dd)");
-			throw new Exception ("Please enter the date (yyyy-MM-dd)"); 
-		}
-	}
 	
 	
 	/**
@@ -178,12 +134,10 @@ public class DoctorServiceImpl {
 	 * 
 	 * @throws Exception
 	 */
-	public String saveAndUpdate(DoctorDTO doctorDTO) throws Exception {
+	public DoctorDTO saveAndUpdate(DoctorDTO doctorDTO) throws Exception {
 		logger.info("To save and update doctor");
 		DoctorDTO docDTO = null;
-		String message = null;
-		
-		 validateDoctorDTO(doctorDTO);
+		validateDoctorDTO(doctorDTO);
 		 Doctor doctor;
 		 
 		 if(doctorDTO.getId()!=null) {
@@ -194,7 +148,7 @@ public class DoctorServiceImpl {
 			 
 			 docDTO=new DoctorDTO(doctorDao.save(doctor));
 			 if(docDTO!=null) {
-				 message= "Updated successfully.";
+				 logger.info("Updated successfully.");
 				 }
 		 }else {
 			 if(doctorDao.findByEmail(doctorDTO.getEmail())!=null) {
@@ -208,17 +162,12 @@ public class DoctorServiceImpl {
 			 u.setEmail(doctorDTO.getEmail());
 			 u.setPassword(doctorDTO.getPassword());
 			 u.setActive(doctorDTO.isActive());
+			 
 			 Role r = new Role();
 			 r.setId(2L);
 			 u.setRole(r);
-			 
-			 if(r.getId()== 1) {
-				 logger.info("RoleName does not match to the doctor.");
-				 message= "RoleName does not match to the doctor.";
 				 
-			 }else if(r.getId()==2) {
-				 
-				Long id =  userDao.save(u).getId();
+				 Long id =  userDao.save(u).getId();
 				 
 				 doctor = new Doctor(doctorDTO);
 				 doctor.setActive(true);
@@ -227,14 +176,10 @@ public class DoctorServiceImpl {
 				 
 				 docDTO=new DoctorDTO(doctorDao.save(doctor));
 				 if(docDTO!=null) {
-					 message= "Saved successfully.";
+					 logger.info("Saved successfully.");
 				 }
-			 }else {
-				 message="Invalid role";
-			 }
-			 
 		 }
-		return message;
+		return docDTO;
 		
 	}
 	
@@ -300,10 +245,6 @@ public class DoctorServiceImpl {
 			 logger.info("Please enter your valid userId.");
 			 throw new Exception ("Please enter your valid userId.");
 		 }
-//		if(doctorDTO.getRoleId()==null || doctorDTO.getRoleId()==0 || doctorDTO.getRoleId()==1) {
-//			logger.info("Please enter roleId 2 for doctor.");
-//			throw new Exception ("Please enter roleId 2 for doctor.");
-//		}
 		if(doctorDTO.getEmail()!=null) {
 			doctor.setEmail(doctorDTO.getEmail());
 		}
@@ -323,17 +264,38 @@ public class DoctorServiceImpl {
 	/**
 	 * @param createdOn
 	 * 
-	 * @return This method will provide the list of doctor's who registered themselves w.r.t the createdDate.
+	 * @return This method will provide the list of doctor's w.r.t the createdDate.
 	 * 
 	 * @throws Exception
 	 */
 	public List<DoctorDTO> getDoctorByCreatedOn(String createdOn) throws Exception {
 
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		
-		Date date = formatter.parse(createdOn);
+		// convert string into Localdatetime format.....
+		LocalDateTime localDateTime = LocalDateTime.parse(createdOn, dtf);
+		System.out.println("Date :"+localDateTime);
 		
-		List<DoctorDTO> doctorDTOList = doctorDao.findByCreatedOn(date).stream().map(DoctorDTO::new).collect(Collectors.toList());
+		
+		List<DoctorDTO> doctorDTOList = doctorDao.findByCreatedOn(localDateTime).stream().map(DoctorDTO::new).collect(Collectors.toList());
+		return doctorDTOList;
+	}
+
+
+	/**
+	 * @param modifiedOn
+	 * 
+	 * @return This method will provide the list of doctor's w.r.t the modifiedDate.
+	 */
+	public List<DoctorDTO> getDoctorByModifiedOn(String modifiedOn) {
+
+		DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_DATE_TIME;
+		
+		// convert string into Localdatetime format.....
+			LocalDateTime localDateTime = LocalDateTime.parse(modifiedOn, dateTimeFormat);
+			System.out.println("Date :"+localDateTime);
+			
+			List<DoctorDTO> doctorDTOList = doctorDao.findByModifiedOn(localDateTime).stream().map(DoctorDTO::new).collect(Collectors.toList());
 		return doctorDTOList;
 	}
 	
