@@ -16,14 +16,11 @@ import com.doctorapi.rest.Enum.Gender;
 import com.doctorapi.rest.Enum.Status;
 import com.doctorapi.rest.dto.DoctorDTO;
 import com.doctorapi.rest.dto.PatientDTO;
-import com.doctorapi.rest.models.Appointment;
 import com.doctorapi.rest.models.Doctor;
-import com.doctorapi.rest.models.Patient;
 import com.doctorapi.rest.models.Role;
 import com.doctorapi.rest.models.User;
 import com.doctorapi.rest.repositories.AppointmentDao;
 import com.doctorapi.rest.repositories.DoctorDao;
-import com.doctorapi.rest.repositories.PatientDao;
 import com.doctorapi.rest.repositories.UserDao;
 import com.doctorapi.restutil.CommonUtils;
 
@@ -42,8 +39,7 @@ public class DoctorServiceImpl {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	
-	@Autowired
-	private PatientDao patientDao;
+	
 	
 	/**
 	 * @param doctorDTO
@@ -273,18 +269,18 @@ public class DoctorServiceImpl {
 	 * 
 	 * @throws Exception
 	 */
-	public List<DoctorDTO> getDoctorByCreatedOn(String createdOn) throws Exception {
-
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		
-		// convert string into Localdatetime format.....
-		LocalDateTime localDateTime = LocalDateTime.parse(createdOn, dtf);
-		System.out.println("Date :"+localDateTime);
-		
-		
-		List<DoctorDTO> doctorDTOList = doctorDao.findByCreatedOn(localDateTime).stream().map(DoctorDTO::new).collect(Collectors.toList());
-		return doctorDTOList;
-	}
+//	public List<DoctorDTO> getDoctorByCreatedOn(String createdOn) throws Exception {
+//
+//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//		
+//		// convert string into Localdatetime format.....
+//		LocalDateTime localDateTime = LocalDateTime.parse(createdOn, dtf);
+//		System.out.println("Date :"+localDateTime);
+//		
+//		
+//		List<DoctorDTO> doctorDTOList = doctorDao.findByCreatedOn(localDateTime).stream().map(DoctorDTO::new).collect(Collectors.toList());
+//		return doctorDTOList;
+//	}
 
 
 	/**
@@ -292,31 +288,31 @@ public class DoctorServiceImpl {
 	 * 
 	 * @return This method will provide the list of doctor's w.r.t the modifiedDate.
 	 */
-	public List<DoctorDTO> getDoctorByModifiedOn(String modifiedOn) {
-
-		DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_DATE_TIME;
-		
-		// convert string into Localdatetime format.....
-			LocalDateTime localDateTime = LocalDateTime.parse(modifiedOn, dateTimeFormat);
-			System.out.println("Date :"+localDateTime);
-			
-			List<DoctorDTO> doctorDTOList = doctorDao.findByModifiedOn(localDateTime).stream().map(DoctorDTO::new).collect(Collectors.toList());
-		return doctorDTOList;
-	}
-
-
+//	public List<DoctorDTO> getDoctorByModifiedOn(String modifiedOn) {
+//
+//		DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_DATE_TIME;
+//		
+//		// convert string into Localdatetime format.....
+//			LocalDateTime localDateTime = LocalDateTime.parse(modifiedOn, dateTimeFormat);
+//			System.out.println("Date :"+localDateTime);
+//			
+//			List<DoctorDTO> doctorDTOList = doctorDao.findByModifiedOn(localDateTime).stream().map(DoctorDTO::new).collect(Collectors.toList());
+//		return doctorDTOList;
+//	}
 
 	
-	
+	/**
+	 * @param doctorId
+	 * 
+	 * @return This method provide the list of Patient regarding doctorId.
+	 * 
+	 */
 	public List<PatientDTO> getPatientListByDoctorId(Long doctorId) {
 
-		List<String> appList = appointmentDao.getAppointmentByDoctorId(doctorId).stream().map(a -> a.getPatient().getFirstName())
+		List<PatientDTO> patientList = appointmentDao.getAppointmentByDoctorId(doctorId).stream().map(p -> new PatientDTO(p,true))
 				.collect(Collectors.toList());
-//		appList.forEach(d -> System.out.println(d.getId()));
-
-		System.out.println("FirstName: "+appList);
 		
-		return null;
+		return patientList;
 	}
 	
 	
