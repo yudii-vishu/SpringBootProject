@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorapi.rest.Enum.Status;
 import com.doctorapi.rest.dto.DoctorDTO;
+import com.doctorapi.rest.dto.PatientDTO;
 import com.doctorapi.rest.services.DoctorServiceImpl;
 
 @RestController
@@ -100,6 +101,20 @@ public class DoctorController {
 	public void deleteDoctor(@PathVariable Long doctorId) throws Exception {
 		
 		doctorServiceImpl.deleteDoctor(doctorId);
+	}
+	
+	
+	
+	/**
+	 * @param doctorId
+	 * 
+	 * @return This controller returns list of patients regarding doctorId.
+	 * 
+	 */
+	@GetMapping("/doctorPatientsList/{doctorId}")
+	public List<PatientDTO> getPatientListByDoctorId(@PathVariable Long doctorId) {
+		
+		return doctorServiceImpl.getPatientListByDoctorId(doctorId);
 	}
 	
 	
