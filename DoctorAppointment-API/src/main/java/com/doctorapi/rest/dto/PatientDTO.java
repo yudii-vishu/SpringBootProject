@@ -3,6 +3,7 @@ package com.doctorapi.rest.dto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.doctorapi.rest.models.Appointment;
 import com.doctorapi.rest.models.Patient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -171,9 +172,22 @@ public class PatientDTO {
 		this.modifiedOn = patient.getModifiedOn();
 	}
 	
-	public PatientDTO() {
-
+	
+	public PatientDTO(Appointment p, boolean flag) {
+ 
+		this.id = p.getPatient().getId();
+		this.firstName = p.getPatient().getFirstName();
+		this.lastName = p.getPatient().getLastName();
+		this.age = p.getPatient().getAge();
+		this.gender = p.getPatient().getGender().getGender();
+		this.address = p.getPatient().getAddress();
+		
 	}
+	
+	public PatientDTO() {
+		
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(address, age, createdOn, email, firstName, gender, id, isActive, lastName, modifiedOn,
