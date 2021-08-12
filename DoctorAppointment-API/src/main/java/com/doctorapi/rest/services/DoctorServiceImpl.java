@@ -15,10 +15,15 @@ import org.springframework.stereotype.Service;
 import com.doctorapi.rest.Enum.Gender;
 import com.doctorapi.rest.Enum.Status;
 import com.doctorapi.rest.dto.DoctorDTO;
+import com.doctorapi.rest.dto.PatientDTO;
+import com.doctorapi.rest.models.Appointment;
 import com.doctorapi.rest.models.Doctor;
+import com.doctorapi.rest.models.Patient;
 import com.doctorapi.rest.models.Role;
 import com.doctorapi.rest.models.User;
+import com.doctorapi.rest.repositories.AppointmentDao;
 import com.doctorapi.rest.repositories.DoctorDao;
+import com.doctorapi.rest.repositories.PatientDao;
 import com.doctorapi.rest.repositories.UserDao;
 import com.doctorapi.restutil.CommonUtils;
 
@@ -34,6 +39,11 @@ public class DoctorServiceImpl {
 	@Autowired
 	private UserDao userDao;
 	
+	@Autowired
+	private AppointmentDao appointmentDao;
+	
+	@Autowired
+	private PatientDao patientDao;
 	
 	/**
 	 * @param doctorDTO
@@ -102,10 +112,7 @@ public class DoctorServiceImpl {
 	public DoctorDTO getDoctorById(Long doctorId) throws Exception{
 		
 		Doctor doctor = validateAndGetDoctor(doctorId);
-		
-//		if(doctor.getId()== null) {
-//			throw new Exception ("Doctor Id is not present.");
-//		}
+
 		return new DoctorDTO(doctor);
 	}
 
@@ -147,9 +154,8 @@ public class DoctorServiceImpl {
 			 doctor.setModifiedBy(u.get().getEmail());
 			 
 			 docDTO=new DoctorDTO(doctorDao.save(doctor));
-			 if(docDTO!=null) {
-				 logger.info("Updated successfully.");
-				 }
+			 logger.info("Updated successfully.");
+				 
 		 }else {
 			 if(doctorDao.findByEmail(doctorDTO.getEmail())!=null) {
 				 logger.info("Email already exist. Please enter valid email.");
@@ -175,9 +181,8 @@ public class DoctorServiceImpl {
 				 doctor.setCreatedBy(userDao.findById(id).get().getEmail());
 				 
 				 docDTO=new DoctorDTO(doctorDao.save(doctor));
-				 if(docDTO!=null) {
-					 logger.info("Saved successfully.");
-				 }
+				 logger.info("Saved successfully.");
+				 
 		 }
 		return docDTO;
 		
@@ -297,6 +302,21 @@ public class DoctorServiceImpl {
 			
 			List<DoctorDTO> doctorDTOList = doctorDao.findByModifiedOn(localDateTime).stream().map(DoctorDTO::new).collect(Collectors.toList());
 		return doctorDTOList;
+	}
+
+
+
+	
+	
+	public List<PatientDTO> getPatientListByDoctorId(Long doctorId) {
+
+		List<String> appList = appointmentDao.getAppointmentByDoctorId(doctorId).stream().map(a -> a.getPatient().getFirstName())
+				.collect(Collectors.toList());
+//		appList.forEach(d -> System.out.println(d.getId()));
+
+		System.out.println("FirstName: "+appList);
+		
+		return null;
 	}
 	
 	

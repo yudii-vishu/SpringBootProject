@@ -130,9 +130,8 @@ public class PatientServiceImpl {
 			patient.setModifiedBy(u.get().getEmail());
 			
 			patDTO = new PatientDTO(patientDao.save(patient));
-			if(patDTO!=null) {
-				logger.info("Updated Successfully");
-			}
+			logger.info("Updated Successfully");
+			
 			
 		}else {
 			if(patientDao.findByEmail(patientDTO.getEmail())!=null) {
@@ -160,9 +159,7 @@ public class PatientServiceImpl {
 				patient.setCreatedBy(userDao.findById(id).get().getEmail());
 				
 				patDTO = new PatientDTO(patientDao.save(patient));
-				if(patDTO!=null) {
-					logger.info("Saved Successfully");
-				}
+				logger.info("Saved Successfully");
 			}
 			return patDTO;
 		}
