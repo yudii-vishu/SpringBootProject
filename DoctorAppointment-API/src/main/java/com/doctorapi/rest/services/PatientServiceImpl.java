@@ -1,7 +1,7 @@
 package com.doctorapi.rest.services;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -239,20 +239,14 @@ public class PatientServiceImpl {
 	 * @param createdOn
 	 * 
 	 * @return This method provide the lis of patient regarding createdDate.
+	 * @throws Exception 
 	 * 
 	 */
-	public List<PatientDTO> getPatientByCreatedOn(LocalDateTime createdOn) {
+	public List<PatientDTO> getPatientByCreatedOn(String createdOn) throws Exception {
 
-//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//		
-////		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-////		DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_DATE_TIME;
-//		
-//		// convert string into Localdatetime format.....
-//		LocalDateTime localDateTime = LocalDate.parse(createdOn, dtf).atStartOfDay();
-//		System.out.println("Date :"+localDateTime);
+		Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(createdOn);
 		
-		List<PatientDTO> patientDTOList = patientDao.findByCreatedOn(createdOn).stream().map(PatientDTO::new).collect(Collectors.toList());
+		List<PatientDTO> patientDTOList = patientDao.findAllWithCreatedOn(date1).stream().map(PatientDTO::new).collect(Collectors.toList());
 		return patientDTOList;
 	}
 
@@ -261,17 +255,14 @@ public class PatientServiceImpl {
 	 * @param modifiedOn
 	 * 
 	 * @return This method provide the lis of patient regarding modifiedDate.
+	 * @throws Exception 
 	 * 
 	 */
-	public List<PatientDTO> getPatientByModifiedOn(String modifiedOn) {
+	public List<PatientDTO> getPatientByModifiedOn(String modifiedOn) throws Exception {
 
-		DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_DATE_TIME;
+		Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(modifiedOn);
 		
-		// convert string into Localdatetime format.....
-		LocalDateTime localDateTime = LocalDateTime.parse(modifiedOn, dateTimeFormat);
-		System.out.println("Date :"+localDateTime);
-		
-		List<PatientDTO> patientDTOList = patientDao.findByModifiedOn(localDateTime).stream().map(PatientDTO::new).collect(Collectors.toList());
+		List<PatientDTO> patientDTOList = patientDao.findAllWithModifiedOn(date1).stream().map(PatientDTO::new).collect(Collectors.toList());
 		return patientDTOList;
 	} 
 	

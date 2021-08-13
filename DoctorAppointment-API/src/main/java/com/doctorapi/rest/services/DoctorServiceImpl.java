@@ -1,7 +1,7 @@
 package com.doctorapi.rest.services;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -261,45 +261,6 @@ public class DoctorServiceImpl {
 		return doctor;
 	}
 
-
-	/**
-	 * @param createdOn
-	 * 
-	 * @return This method will provide the list of doctor's w.r.t the createdDate.
-	 * 
-	 * @throws Exception
-	 */
-//	public List<DoctorDTO> getDoctorByCreatedOn(String createdOn) throws Exception {
-//
-//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//		
-//		// convert string into Localdatetime format.....
-//		LocalDateTime localDateTime = LocalDateTime.parse(createdOn, dtf);
-//		System.out.println("Date :"+localDateTime);
-//		
-//		
-//		List<DoctorDTO> doctorDTOList = doctorDao.findByCreatedOn(localDateTime).stream().map(DoctorDTO::new).collect(Collectors.toList());
-//		return doctorDTOList;
-//	}
-
-
-	/**
-	 * @param modifiedOn
-	 * 
-	 * @return This method will provide the list of doctor's w.r.t the modifiedDate.
-	 */
-//	public List<DoctorDTO> getDoctorByModifiedOn(String modifiedOn) {
-//
-//		DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_DATE_TIME;
-//		
-//		// convert string into Localdatetime format.....
-//			LocalDateTime localDateTime = LocalDateTime.parse(modifiedOn, dateTimeFormat);
-//			System.out.println("Date :"+localDateTime);
-//			
-//			List<DoctorDTO> doctorDTOList = doctorDao.findByModifiedOn(localDateTime).stream().map(DoctorDTO::new).collect(Collectors.toList());
-//		return doctorDTOList;
-//	}
-
 	
 	/**
 	 * @param doctorId
@@ -308,12 +269,47 @@ public class DoctorServiceImpl {
 	 * 
 	 */
 	public List<PatientDTO> getPatientListByDoctorId(Long doctorId) {
-
+		
 		List<PatientDTO> patientList = appointmentDao.getAppointmentByDoctorId(doctorId).stream().map(p -> new PatientDTO(p,true))
 				.collect(Collectors.toList());
 		
 		return patientList;
 	}
+	
+	
+
+	/**
+	 * @param createdOn
+	 * 
+	 * @return This method will provide the list of doctor's w.r.t the createdDate.
+	 * 
+	 * @throws Exception
+	 */
+	public List<DoctorDTO> getDoctorBycreatedOn(String createdOn) throws Exception {
+
+		Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(createdOn);
+		
+		List<DoctorDTO> doctorDTOList = doctorDao.findAllWithCreatedOn(date1).stream().map(DoctorDTO::new).collect(Collectors.toList());
+		return doctorDTOList;
+	}
+
+
+	
+	/**
+	 * @param modifiedOn
+	 * 
+	 * @return This method will provide the list of doctor's w.r.t the modifiedDate.
+	 * @throws Exception 
+	 */
+	public List<DoctorDTO> getDoctorByModifiedOn(String modifiedOn) throws Exception {
+
+		Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(modifiedOn);
+			
+			List<DoctorDTO> doctorDTOList = doctorDao.findAllWithModifiedOn(date1).stream().map(DoctorDTO::new).collect(Collectors.toList());
+		return doctorDTOList;
+	}
+
+	
 	
 	
 	
