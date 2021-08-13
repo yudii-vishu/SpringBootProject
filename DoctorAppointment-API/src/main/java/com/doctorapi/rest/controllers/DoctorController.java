@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorapi.rest.Enum.Status;
@@ -111,13 +110,11 @@ public class DoctorController {
 	 * @return This controller returns list of patients regarding doctorId.
 	 * 
 	 */
-	@GetMapping("/doctorPatientsList/{doctorId}")
+	@GetMapping("/doctor/patientList/{doctorId}")
 	public List<PatientDTO> getPatientListByDoctorId(@PathVariable Long doctorId) {
 		
 		return doctorServiceImpl.getPatientListByDoctorId(doctorId);
 	}
-	
-	
 	
 	
 	/**
@@ -127,10 +124,10 @@ public class DoctorController {
 	 * 
 	 * @throws Exception
 	 */
-	@GetMapping("/doctors")
-	public List<DoctorDTO> getDoctorByCreatedOn(@RequestParam("createdDate") String createdOn) throws Exception {
+	@GetMapping("/doctor/createdOn/{createdOn}")
+	public List<DoctorDTO> getDoctorBycreatedOn(@PathVariable String createdOn) throws Exception {
 		
-		return doctorServiceImpl.getDoctorByCreatedOn(createdOn);
+		return doctorServiceImpl.getDoctorBycreatedOn(createdOn);
 	}
 	
 	/**
@@ -140,10 +137,12 @@ public class DoctorController {
 	 * 
 	 * @throws Exception
 	 */
-	@GetMapping("/doctor/modifiedDate/{modifiedOn}")
+	@GetMapping("/doctor/modifiedOn/{modifiedOn}")
 	public List<DoctorDTO> getDoctorByModifiedOn(@PathVariable String modifiedOn) throws Exception {
 		
 		return doctorServiceImpl.getDoctorByModifiedOn(modifiedOn);
 	}
+	
+	
 	
 }
