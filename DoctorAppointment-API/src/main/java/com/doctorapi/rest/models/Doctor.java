@@ -1,7 +1,7 @@
 package com.doctorapi.rest.models;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,9 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
 
 import com.doctorapi.rest.Enum.Gender;
 import com.doctorapi.rest.Enum.Status;
@@ -55,16 +54,14 @@ public class Doctor {
 	@Column(name = "created_by")
 	private String createdBy;
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_on")
-	private Date createdOn = new Date(System.currentTimeMillis()) ;
+	private LocalDateTime createdOn = LocalDateTime.now();
 	
 	@Column(name = "modified_by")
 	private String modifiedBy  ;
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modified_on")
-	private Date modifiedOn = new Date();
+	private LocalDateTime modifiedOn = LocalDateTime.now();
 	
 	@NotNull
 	@Column(name = "email")
@@ -94,7 +91,7 @@ public class Doctor {
 //	
 	@PreUpdate
 	public void setLastUpdate() {
-		this.modifiedOn = new Date();
+		this.modifiedOn = LocalDateTime.now();
 	}
 	
 
@@ -184,19 +181,8 @@ public class Doctor {
 		return createdBy;
 	}
 
-
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
-	}
-
-
-	public Date getCreatedOn() {
-		return createdOn;
-	}
-
-
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
 	}
 
 
@@ -209,13 +195,22 @@ public class Doctor {
 		this.modifiedBy = modifiedBy;
 	}
 
+	public LocalDateTime getCreatedOn() {
+		return createdOn;
+	}
 
-	public Date getModifiedOn() {
+
+	public void setCreatedOn(LocalDateTime createdOn) {
+		this.createdOn = createdOn;
+	}
+
+
+	public LocalDateTime getModifiedOn() {
 		return modifiedOn;
 	}
 
 
-	public void setModifiedOn(Date modifiedOn) {
+	public void setModifiedOn(LocalDateTime modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
 
@@ -252,23 +247,8 @@ public class Doctor {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((appointments == null) ? 0 : appointments.hashCode());
-		result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
-		result = prime * result + ((createdOn == null) ? 0 : createdOn.hashCode());
-		result = prime * result + ((date == null) ? 0 : date.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + (isActive ? 1231 : 1237);
-		result = prime * result + ((modifiedBy == null) ? 0 : modifiedBy.hashCode());
-		result = prime * result + ((modifiedOn == null) ? 0 : modifiedOn.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
-		return result;
+		return Objects.hash(appointments, createdBy, createdOn, date, email, gender, id, isActive, modifiedBy,
+				modifiedOn, name, password, status, user);
 	}
 
 	@Override
@@ -280,68 +260,13 @@ public class Doctor {
 		if (getClass() != obj.getClass())
 			return false;
 		Doctor other = (Doctor) obj;
-		if (appointments == null) {
-			if (other.appointments != null)
-				return false;
-		} else if (!appointments.equals(other.appointments))
-			return false;
-		if (createdBy == null) {
-			if (other.createdBy != null)
-				return false;
-		} else if (!createdBy.equals(other.createdBy))
-			return false;
-		if (createdOn == null) {
-			if (other.createdOn != null)
-				return false;
-		} else if (!createdOn.equals(other.createdOn))
-			return false;
-		if (date == null) {
-			if (other.date != null)
-				return false;
-		} else if (!date.equals(other.date))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (gender != other.gender)
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (isActive != other.isActive)
-			return false;
-		if (modifiedBy == null) {
-			if (other.modifiedBy != null)
-				return false;
-		} else if (!modifiedBy.equals(other.modifiedBy))
-			return false;
-		if (modifiedOn == null) {
-			if (other.modifiedOn != null)
-				return false;
-		} else if (!modifiedOn.equals(other.modifiedOn))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (status != other.status)
-			return false;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
-		return true;
+		return Objects.equals(appointments, other.appointments) && Objects.equals(createdBy, other.createdBy)
+				&& Objects.equals(createdOn, other.createdOn) && Objects.equals(date, other.date)
+				&& Objects.equals(email, other.email) && gender == other.gender && Objects.equals(id, other.id)
+				&& isActive == other.isActive && Objects.equals(modifiedBy, other.modifiedBy)
+				&& Objects.equals(modifiedOn, other.modifiedOn) && Objects.equals(name, other.name)
+				&& Objects.equals(password, other.password) && status == other.status
+				&& Objects.equals(user, other.user);
 	}
 	
 	

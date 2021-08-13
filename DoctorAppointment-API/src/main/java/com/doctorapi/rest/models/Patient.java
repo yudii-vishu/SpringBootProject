@@ -1,8 +1,10 @@
 package com.doctorapi.rest.models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,18 +13,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.doctorapi.rest.Enum.Gender;
 import com.doctorapi.rest.dto.PatientDTO;
 
-@Entity
+@Entity(name = "patient")
 @Table(name = "patient")
 public class Patient {
 	@Id
@@ -50,16 +51,14 @@ public class Patient {
 	@Column(name = "created_by")
 	private String createdBy;
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_on")
-	private Date createdOn = new Date(System.currentTimeMillis()) ;
+	private LocalDateTime createdOn = LocalDateTime.now();
 	
 	@Column(name = "modified_by")
 	private String modifiedBy  ;
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modified_on")
-	private Date modifiedOn = new Date();
+	private LocalDateTime modifiedOn = LocalDateTime.now();
 	
 	@NotNull
 	@Column(name = "gender")
@@ -83,10 +82,25 @@ public class Patient {
 	@JoinColumn(name = "user_id")
 	private User user;
 	
-//	
+	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)
+	private List<Appointment> appointments;
+	
+
+	
+	public List<Appointment> getAppointments() {
+		return appointments;
+	}
+
+
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
+	}
+
+
+	//	
 	@PreUpdate
 	public void setLastUpdate() {
-		this.modifiedOn = new Date();
+		this.modifiedOn = LocalDateTime.now();
 	}
 	
 
@@ -180,16 +194,6 @@ public class Patient {
 	}
 
 
-	public Date getCreatedOn() {
-		return createdOn;
-	}
-
-
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-	}
-
-
 	public String getModifiedBy() {
 		return modifiedBy;
 	}
@@ -199,16 +203,25 @@ public class Patient {
 		this.modifiedBy = modifiedBy;
 	}
 
+	public LocalDateTime getCreatedOn() {
+		return createdOn;
+	}
 
-	public Date getModifiedOn() {
+
+	public void setCreatedOn(LocalDateTime createdOn) {
+		this.createdOn = createdOn;
+	}
+
+
+	public LocalDateTime getModifiedOn() {
 		return modifiedOn;
 	}
 
 
-	public void setModifiedOn(Date modifiedOn) {
+	public void setModifiedOn(LocalDateTime modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
-
+ 
 
 	public Patient(PatientDTO patientDTO) throws Exception {
 		
@@ -240,14 +253,14 @@ public class Patient {
 		return "Patient [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age
 				+ ", isActive=" + isActive + ", createdBy=" + createdBy + ", createdOn=" + createdOn + ", modifiedBy="
 				+ modifiedBy + ", modifiedOn=" + modifiedOn + ", gender=" + gender + ", address=" + address + ", email="
-				+ email + ", password=" + password + ", user=" + user + "]";
+				+ email + ", password=" + password + ", user=" + user + ", appointments=" + appointments + "]";
 	}
 
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(address, age, createdBy, createdOn, email, firstName, gender, id, isActive, lastName,
-				modifiedBy, modifiedOn, password, user);
+		return Objects.hash(address, age, appointments, createdBy, createdOn, email, firstName, gender, id, isActive,
+				lastName, modifiedBy, modifiedOn, password, user);
 	}
 
 
@@ -260,7 +273,8 @@ public class Patient {
 		if (getClass() != obj.getClass())
 			return false;
 		Patient other = (Patient) obj;
-		return Objects.equals(address, other.address) && age == other.age && Objects.equals(createdBy, other.createdBy)
+		return Objects.equals(address, other.address) && age == other.age
+				&& Objects.equals(appointments, other.appointments) && Objects.equals(createdBy, other.createdBy)
 				&& Objects.equals(createdOn, other.createdOn) && Objects.equals(email, other.email)
 				&& Objects.equals(firstName, other.firstName) && gender == other.gender && Objects.equals(id, other.id)
 				&& isActive == other.isActive && Objects.equals(lastName, other.lastName)
