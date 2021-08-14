@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.doctorapi.rest.Enum.Gender;
 import com.doctorapi.rest.Enum.Status;
+import com.doctorapi.rest.dto.AppointmentDTO;
 import com.doctorapi.rest.dto.DoctorDTO;
 import com.doctorapi.rest.dto.PatientDTO;
 import com.doctorapi.rest.models.Doctor;
@@ -307,6 +308,23 @@ public class DoctorServiceImpl {
 			
 			List<DoctorDTO> doctorDTOList = doctorDao.findAllWithModifiedOn(date1).stream().map(DoctorDTO::new).collect(Collectors.toList());
 		return doctorDTOList;
+	}
+
+
+
+	/**
+	 * @param doctorId
+	 * 
+	 * @return This method provide the List of currentDate appointments of doctor by doctorId.
+	 * @throws Exception 
+	 * 
+	 */
+	public List<AppointmentDTO> getTodaysAppointment(Long doctorId) throws Exception {
+
+		List<AppointmentDTO> appointmentList = appointmentDao.findAllAppointmentByDoctorId(doctorId).stream().map(AppointmentDTO::new)
+				.collect(Collectors.toList());
+		
+		return appointmentList;
 	}
 
 	
