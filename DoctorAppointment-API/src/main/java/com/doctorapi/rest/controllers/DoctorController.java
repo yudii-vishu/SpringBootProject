@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctorapi.rest.Enum.Status;
+import com.doctorapi.rest.dto.AppointmentDTO;
 import com.doctorapi.rest.dto.DoctorDTO;
 import com.doctorapi.rest.dto.PatientDTO;
 import com.doctorapi.rest.services.DoctorServiceImpl;
@@ -142,6 +143,22 @@ public class DoctorController {
 		
 		return doctorServiceImpl.getDoctorByModifiedOn(modifiedOn);
 	}
+	
+
+	/**
+	 * @param doctorId
+	 * 
+	 * @return This controller returns the list of appointments for doctor by doctorId w.r.t currentDate.
+	 * @throws Exception 
+	 * 
+	 */
+	@GetMapping("/appointmentList/{doctorId}")
+	public List<AppointmentDTO> getTodaysAppointment(@PathVariable Long doctorId) throws Exception {
+		
+		return doctorServiceImpl.getTodaysAppointment(doctorId);
+	}
+	
+	
 	
 	
 	
