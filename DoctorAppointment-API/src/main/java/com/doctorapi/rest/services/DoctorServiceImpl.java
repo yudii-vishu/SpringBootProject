@@ -145,7 +145,6 @@ public class DoctorServiceImpl {
 		 Doctor doctor;
 		 
 		 if(doctorDTO.getId()!=null) {
-			 
 			 doctor = validateAndUpdate(doctorDTO);
 			 Optional<User> u = userDao.findById(doctorDTO.getUserId());
 			 doctor.setModifiedBy(u.get().getEmail());
@@ -158,28 +157,23 @@ public class DoctorServiceImpl {
 				 logger.info("Email already exist. Please enter valid email.");
 				 throw new Exception ("Email already exist. Please enter valid email.");
 			 }
-			 
 			
 			 // Adding new doctor detail
-			 User u = new User();
-			 u.setEmail(doctorDTO.getEmail());
-			 u.setPassword(doctorDTO.getPassword());
-			 u.setActive(doctorDTO.isActive());
-			 
+			 User user = new User();
+			 user.setEmail(doctorDTO.getEmail());
+			 user.setPassword(doctorDTO.getPassword());
+			 user.setActive(doctorDTO.isActive());
 			 Role r = new Role();
 			 r.setId(2L);
-			 u.setRole(r);
-				 
-				 Long id =  userDao.save(u).getId();
-				 
-				 doctor = new Doctor(doctorDTO);
+			 user.setRole(r);
+
+			 	 doctor = new Doctor(doctorDTO);
 				 doctor.setActive(true);
-				 doctor.getUser().setId(id);
-				 doctor.setCreatedBy(userDao.findById(id).get().getEmail());
+				 doctor.setUser(user);
+				 doctor.setCreatedBy(doctorDTO.getEmail());
 				 
 				 docDTO=new DoctorDTO(doctorDao.save(doctor));
 				 logger.info("Saved successfully.");
-				 
 		 }
 		return docDTO;
 		

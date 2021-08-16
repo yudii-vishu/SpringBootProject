@@ -141,22 +141,19 @@ public class PatientServiceImpl {
 			
 			
 			//Adding new patient detail
-			User u = new User();
+			User user = new User();
 			
-			u.setEmail(patientDTO.getEmail());
-			u.setPassword(patientDTO.getPassword());
-			u.setActive(patientDTO.isActive());
-			
+			user.setEmail(patientDTO.getEmail());
+			user.setPassword(patientDTO.getPassword());
+			user.setActive(patientDTO.isActive());
 			Role r = new Role();
 			r.setId(1L);
-			u.setRole(r);
-				
-				Long id = userDao.save(u).getId();
-				
+			user.setRole(r);
+
 				patient = new Patient(patientDTO);
 				patient.setActive(true);
-				patient.getUser().setId(id);
-				patient.setCreatedBy(userDao.findById(id).get().getEmail());
+				patient.setUser(user);
+				patient.setCreatedBy(patientDTO.getEmail());
 				
 				patDTO = new PatientDTO(patientDao.save(patient));
 				logger.info("Saved Successfully");
