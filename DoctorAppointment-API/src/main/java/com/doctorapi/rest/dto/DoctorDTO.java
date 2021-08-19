@@ -1,7 +1,7 @@
 package com.doctorapi.rest.dto;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.doctorapi.rest.models.Doctor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,23 +20,23 @@ public class DoctorDTO {
 	
 	@JsonIgnore
 	private Long roleId;
-	private Date createdOn;
-	private Date modifiedOn;
+	private LocalDateTime createdOn;
+	private LocalDateTime modifiedOn;
 	
 
-	public Date getCreatedOn() {
+	public LocalDateTime getCreatedOn() {
 		return createdOn;
 	}
 
-	public void setCreatedOn(Date createdOn) {
+	public void setCreatedOn(LocalDateTime createdOn) {
 		this.createdOn = createdOn;
 	}
 
-	public Date getModifiedOn() {
+	public LocalDateTime getModifiedOn() {
 		return modifiedOn;
 	}
 
-	public void setModifiedOn(Date modifiedOn) {
+	public void setModifiedOn(LocalDateTime modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
 
