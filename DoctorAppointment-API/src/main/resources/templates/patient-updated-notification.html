@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8"/>
+<title>BookMyDoctor App!!</title>
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+</head>
+
+<body>
+	<div class="wrapper"
+		style="max-width: 600px; margin: 0 auto; line-height: 1.2; border: 1px solid #98AFC7; font-family: 'Open Sans', sans-serif !important; font-weight: 400;">
+		
+		<!--  Banner  -->
+		<div
+			style="background-color: green; background-size: cover; height: 100px; color: #00FFFF; font-weight: 700; display: inline-flex; width: 100%;">
+<!-- 			<img src="cid:mylogo" height="60" width="60" style="margin: 20px;" /> -->
+			<div style="margin-left: 30%">
+				<h2 style="font-size: 28px; color: #00FFFF; font-weight: 700"> Book My Doctor </h2>
+			</div>
+		</div>
+		<div class="container" style="padding: 40px 60px;">
+		
+			<!--  INFO CONTENT  -->
+			<table class="table-inner mb-0"	style="width: 100%; font-size: 16px; color: #000000; margin-bottom: 0px;"
+				align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+				<tbody>
+					<!-- content -->
+					<tr>
+						<td style="font-family: 'Open Sans', sans-serif !important;">
+							<p>
+								Dear <b><span th:text="${patName} + ','"></span></b>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td style="font-family: 'Open Sans', sans-serif !important;">
+							<p>
+								Your account on <b>BookMyDoctor</b> is updated successfully.
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td style="font-family: 'Open Sans', sans-serif !important;">
+							<p>Your userId is <b><span th:text="${patient.getUserId()}"></span></b></p>
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="font-family: 'Open Sans', sans-serif !important;">
+							<p>Your username is <b><span th:text="${patient.getEmail()}"></span></b></p>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="font-family: 'Open Sans', sans-serif !important;">
+							<p>
+								<em>Our <span>BookMyDoctor Team </span>
+
+								</em>
+							</p>
+						</td>
+					</tr>
+					<!-- end content -->
+				</tbody>
+			</table>
+		</div>
+
+		<!-- FOOTER -->
+
+		<div
+			style="background-color: #F7F9F9; height: 100px; font-weight: 700; width: 100%; line-height: 5; box-sizing: border-box;">
+			<div style="text-align: center;">
+				<span style="color: black !important; font-size: 18px;">Need
+					Help ?</span> 
+					<span> <a href="Site under progress..!!"
+					class="link"
+					style="font-size: 18px; color: #3db6b6; font-weight: 400; text-decoration: none;">Contact
+						Us</a>
+				</span>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>
