@@ -28,8 +28,13 @@ import com.doctorapi.restutil.CommonUtils;
 @Service
 public class DoctorServiceImpl {
 	
+	private EmailService emailService;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	@Autowired
+	public DoctorServiceImpl(EmailService emailService) {
+		this.emailService = emailService;
+	}
 	
 	@Autowired
 	private DoctorDao doctorDao;
@@ -151,6 +156,13 @@ public class DoctorServiceImpl {
 			 
 			 docDTO=new DoctorDTO(doctorDao.save(doctor));
 			 logger.info("Updated successfully.");
+			 
+			 try {
+					emailService.sendDoctorUpdationMail(doctorDTO);
+					
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
 				 
 		 }else {
 			 if(doctorDao.findByEmail(doctorDTO.getEmail())!=null) {
@@ -171,6 +183,12 @@ public class DoctorServiceImpl {
 				 doctor.setActive(true);
 				 doctor.setUser(user);
 				 doctor.setCreatedBy(doctorDTO.getEmail());
+				 
+				 try {
+						emailService.sendDoctorNotificationMail(doctorDTO);
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
 				 
 				 docDTO=new DoctorDTO(doctorDao.save(doctor));
 				 logger.info("Saved successfully.");

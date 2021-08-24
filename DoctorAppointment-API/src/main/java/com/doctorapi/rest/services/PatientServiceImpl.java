@@ -26,7 +26,13 @@ import com.doctorapi.restutil.CommonUtils;
 @Service
 public class PatientServiceImpl {
 	
+	private EmailService emailService;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	public PatientServiceImpl(EmailService emailService) {
+		this.emailService = emailService;
+	}
 	
 	@Autowired
 	private PatientDao patientDao;
@@ -131,7 +137,13 @@ public class PatientServiceImpl {
 			
 			patDTO = new PatientDTO(patientDao.save(patient));
 			logger.info("Updated Successfully");
-			
+			try {
+//				emailService.sendPatientUpdationMail(patient,patientDTO.getFirstName()+" "+patientDTO.getLastName());
+				emailService.sendPatientUpdationMail(patientDTO);
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
 			
 		}else {
 			if(patientDao.findByEmail(patientDTO.getEmail())!=null) {
@@ -155,6 +167,11 @@ public class PatientServiceImpl {
 				patient.setUser(user);
 				patient.setCreatedBy(patientDTO.getEmail());
 				
+				try {
+					emailService.sendPatientNotificationMail(patientDTO);
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
 				patDTO = new PatientDTO(patientDao.save(patient));
 				logger.info("Saved Successfully");
 			}
