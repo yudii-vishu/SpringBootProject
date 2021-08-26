@@ -18,19 +18,30 @@ import com.doctorapi.rest.models.Appointment;
 import com.doctorapi.rest.models.Doctor;
 import com.doctorapi.rest.models.Patient;
 import com.doctorapi.rest.repositories.AppointmentDao;
+import com.doctorapi.rest.repositories.DoctorDao;
 import com.doctorapi.rest.repositories.PatientDao;
 
 
 @Service
 public class AppointmentServiceImpl {
 	
+	private EmailService emailService;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	public AppointmentServiceImpl(EmailService emailService) {
+		this.emailService = emailService;
+	}
 	
 	@Autowired
 	private AppointmentDao appointmentDao;
 	
 	@Autowired
 	private PatientDao patientDao;
+	
+	@Autowired
+	private DoctorDao doctorDao;
+	
 	
 	
 	
@@ -94,22 +105,43 @@ public class AppointmentServiceImpl {
 		
 		logger.info("To save appointment.");
 		validateAppointmentDTO(appointmentDTO);
+		AppointmentDTO appDTO = null;
 		Appointment appointment;
 		
 		if(appointmentDTO.getId()!=null) {
 			
 			appointment = validateAndUpdate(appointmentDTO);
+			appDTO = new AppointmentDTO(appointmentDao.save(appointment));
+			logger.info("appointment upadated successfully...");
+			try {
+				Optional<Patient> patient = patientDao.findById(appointmentDTO.getPatientId());
+				Optional<Doctor> doctor = doctorDao.findById(appointmentDTO.getDoctorId());
+				
+				emailService.sendAppointmentUpdationMail(patient.get(), appointmentDTO);;
+				emailService.sendAppointmentPatUpdateDoctorMail(doctor.get(),appointmentDTO);
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}else {
-			
 			appointment = new Appointment(appointmentDTO);
-		}
-		return new AppointmentDTO(appointmentDao.save(appointment));
-		
-//		Patient pat = new Patient();
-//		Doctor doc = new Doctor();
-//		doc.setId(appointmentDTO.getDoctorId());
-//		pat.setDoctor(doc);
+			appDTO = new AppointmentDTO(appointmentDao.save(appointment));
+			logger.info("appointment saved successfully...");
+			try {
+				Optional<Patient> patient = patientDao.findById(appointmentDTO.getPatientId());
+				Optional<Doctor> doctor = doctorDao.findById(appointmentDTO.getDoctorId());
+				
+				emailService.sendPatientAppointmentMail(patient.get(), appointmentDTO);
+				emailService.sendDoctorAppointmentMail(doctor.get(),appointmentDTO);
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
 			
+		}
+		return appDTO;
+		
 	}
 		
 	
@@ -272,6 +304,10 @@ public class AppointmentServiceImpl {
 		}
 		return appointment.get();
 	}
+
+
+	
+	
 
 
 }

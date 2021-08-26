@@ -16,7 +16,8 @@ import com.doctorapi.rest.Config.PropConfig;
 import com.doctorapi.rest.dto.AppointmentDTO;
 import com.doctorapi.rest.dto.DoctorDTO;
 import com.doctorapi.rest.dto.PatientDTO;
-import com.doctorapi.rest.models.Appointment;
+import com.doctorapi.rest.models.Doctor;
+import com.doctorapi.rest.models.Patient;
 
 @Service
 public class EmailService {
@@ -76,7 +77,7 @@ public class EmailService {
 		Context context = new Context();
 		context.setVariable("patName", patient.getFirstName());
 		context.setVariable("patient", patient);
-		String html = springTemplateEngine.process("patient-ceated-notification", context);
+		String html = springTemplateEngine.process("patient-created-notification", context);
 		
 		sendEmail(sendTo, sendFrom, html, subject);
 		logger.info("Notification sent successfully to the patient....");
@@ -121,7 +122,7 @@ public class EmailService {
 		
 		String sendTo = doctor.getEmail();
 		String sendFrom = "vishalofficial4554@gmail.com";
-		String subject = "Your Doctor account in BookMyDoctor is created successfully."+" "+"Your userName is "+doctor.getEmail();
+		String subject = "Your Doctor account in BookMyDoctor is created successfully";
 		Context context = new Context();
 		context.setVariable("docName", doctor.getName());
 		context.setVariable("doctor", doctor);
@@ -137,16 +138,16 @@ public class EmailService {
 	 * @param doctorName
 	 * @throws Exception
 	 * 
-	 * This method will send updation notification email to patient.
+	 * This method will send updation notification email to doctor.
 	 */
 	public void sendDoctorUpdationMail(DoctorDTO doctor) throws Exception {
 		
-		logger.info("to send notification that patient's data updated successfully.");
+		logger.info("to send notification that doctor's data updated successfully.");
 		validateSmtp();
 		
 		String sendTo = doctor.getEmail();
 		String sendFrom = "vishalofficial4554@gmail.com";
-		String subject = "Your account in BookMyDoctor is updated successfully.";
+		String subject = "Hello! Doctor your account in BookMyDoctor is updated successfully.";
 		Context context = new Context();
 		context.setVariable("docName", doctor.getName());
 		context.setVariable("doctor", doctor);
@@ -158,21 +159,94 @@ public class EmailService {
 	}
 	
 	
-	public void sendAppointmentUpdationMail(Appointment appointment,AppointmentDTO appointmentDTO) throws Exception {
+	/**
+	 * This method will send appointmentUpdation email to patient.
+	 */
+	public void sendAppointmentUpdationMail(Patient patient, AppointmentDTO appointment) throws Exception {
 		
-		logger.info("to send update appointment notification to the patient and doctor.");
+		logger.info("to send update appointment notification to the patient.");
 		validateSmtp();
 		
-		String sendTo = appointment.getPatient().getEmail();
+		String sendTo = patient.getEmail();
 		String sendFrom = "vishalofficial4554@gmail.com";
-		String subject = "Your appointment is booked successfully";
+		String subject = "Your appointment is updated successfully";
 		Context context = new Context();
-		context.setVariable("patientName", appointmentDTO.getPatientFirstName());
+		context.setVariable("patientName", appointment.getPatientFirstName());
+		context.setVariable("patient", patient);
 		context.setVariable("appointment", appointment);
-		String html = springTemplateEngine.process("patient-appointmentUpdate-notification", context);
+
+		String html = springTemplateEngine.process("appointment-patientUpdate-notification", context);
 		
 		sendEmail(sendTo, sendFrom, html, subject);
-		logger.info("Appointment Notification sent successfully to the patient.....");
+		logger.info("Appointment Updation Notification sent successfully to the patient.....");
+	}
+	
+	
+	/**
+	 *  This method will send patient appointmentUpdation email to their respective doctor.
+	 */
+	public void sendAppointmentPatUpdateDoctorMail(Doctor doctor, AppointmentDTO appointment) throws Exception {
+		
+		logger.info("to send update appointment notification to the doctor.");
+		validateSmtp();
+		
+		String sendTo = doctor.getEmail();
+		String sendFrom = "vishalofficial4554@gmail.com";
+		String subject = "Doctor! Your patient appointment is updated.";
+		Context context = new Context();
+		context.setVariable("doctorName", appointment.getDoctorName());
+		context.setVariable("doctor", doctor);
+		context.setVariable("appointment", appointment);
+		String html = springTemplateEngine.process("appointment-patUpdate-doc-notification", context);
+		
+		sendEmail(sendTo, sendFrom, html, subject);
+		logger.info("Appointment Updation Notification sent successfully to the doctor.....");
+	}
+	
+	
+	/**
+	 *  This method will send patient created appointment email to the patient. 
+	 */
+	public void sendPatientAppointmentMail(Patient patient, AppointmentDTO appointment) throws Exception {
+		
+		logger.info("to send the book appointment notification to patient.");
+		validateSmtp();
+		
+		String sendTo = patient.getEmail();
+		String sendFrom = "vishalofficial4554@gmail.com";
+		String subject = "Your Appointment is created successfully";
+		Context context = new Context();
+		context.setVariable("patientName", patient.getFirstName());
+		context.setVariable("patient", patient);
+		context.setVariable("appointment", appointment);
+
+		String html = springTemplateEngine.process("appointment-patient-notification", context);
+		
+		sendEmail(sendTo, sendFrom, html, subject);
+		logger.info("Appointment booking Notification sent successfully to the patient.....");
+	}
+	
+	
+	
+	/**
+	 *  This method will send the patient booked appointment to their respective doctor.
+	 */
+	public void sendDoctorAppointmentMail(Doctor doctor, AppointmentDTO appointment) throws Exception {
+		
+		logger.info("to send the booked appointment notification to doctor.");
+		validateSmtp();
+		
+		String sendTo = doctor.getEmail();
+		String sendFrom = "vishalofficial4554@gmail.com";
+		String subject = "Doctor! Here is your new Appointment.";
+		Context context = new Context();
+		context.setVariable("doctorName", doctor.getName());
+		context.setVariable("doctor", doctor);
+		context.setVariable("appointment", appointment);
+		String html = springTemplateEngine.process("appointment-doctor-notification", context);
+		
+		sendEmail(sendTo, sendFrom, html, subject);
+		logger.info("Appointment booked notification sent successfully to the doctor.....");
 	}
 	
 	
