@@ -28,36 +28,66 @@
 					<tr>
 						<td style="font-family: 'Open Sans', sans-serif !important;">
 							<p>
-								Hello Doctor <b><span th:text="${docName} +','"></span></b>
+								Hello, Dear <b><span th:text="${patientName} +','"></span></b>
 							</p>
 						</td>
 					</tr>
 					<tr>
 						<td style="font-family: 'Open Sans', sans-serif !important;">
 							<p>
-								Your account on <b>BookMyDoctor</b> is created successfully.
+								Your appointment on <b>BookMyDoctor</b> is booked successfully.
 							</p>
 						</td>
 					</tr>
+<!-- 					<tr> -->
+<!-- 						<td> -->	
+<!-- 						 	<p>Your username is <b><span th:text="${patient.getEmail()}"></span></b></p> -->
+<!-- 						 </td> -->
+<!-- 					</tr> -->
 					<tr>
-						<td style="font-family: 'Open Sans', sans-serif !important;">
-						 	<p>Your Name is <b><span th:text="${doctor.getName()}"></span></b></p>
+						<td>
+						 	<p>Your FirstName is <b><span th:text="${patient.getFirstName()}"></span></b></p>
 						 </td>
 					</tr>
 					<tr>
-						<td style="font-family: 'Open Sans', sans-serif !important;">
-						 	<p>Your username is <b><span th:text="${doctor.getEmail()}"></span></b></p>
+						<td>
+						 	<p>Your lastName is <b><span th:text="${patient.getLastName()}"></span></b></p>
+						 </td>
+					</tr>
+<!-- 					<tr> -->
+<!-- 						<td> -->
+<!-- 						 	<p>Your Appointment Id is <b><span th:text="${appointment.getId()}"></span></b></p> -->
+<!-- 						 </td> -->
+<!-- 					</tr> -->
+					<tr>
+						<td>
+						 	<p>Your Doctor's Id is <b><span th:text="${appointment.getDoctorId()}"></span></b></p>
+						 </td>
+					</tr>
+<!-- 					<tr> -->
+<!-- 						<td> -->
+<!-- 						 	<p>Your Doctor's Name is <b><span th:text="${doctor.getName()}"></span></b></p> -->
+<!-- 						 </td> -->
+<!-- 					</tr> -->
+					<tr>
+						<td>
+						 	<p>Your appointmentReason is <b><span th:text="${appointment.getReason()}"></span></b></p>
 						 </td>
 					</tr>
 					<tr>
-						<td style="font-family: 'Open Sans', sans-serif !important;">
-						 	<p>Your password is <b><span th:text="${doctor.getPassword()}"></span></b></p>
+						<td>
+						 	<p>Your appointmentSlot is <b><span th:text="${appointment.getAppointmentSlot()}"></span></b></p>
+						 </td>
+					</tr>
+					<tr>
+						<td>
+						 	<p>Your appointmentDate is <b><span th:text="${appointment.getAppointmnetDate()}"></span></b></p>
 						 </td>
 					</tr>
 					<tr>
 						<td style="font-family: 'Open Sans', sans-serif !important;">
 							<p>
-								<span><i>Dear, Doctor please do not share your credential with others.</i></span>
+								 <span><b><i>Stay Safe, Stay Healthy...!!</i></b></span>
 							</p>
 						</td>
 					</tr>
